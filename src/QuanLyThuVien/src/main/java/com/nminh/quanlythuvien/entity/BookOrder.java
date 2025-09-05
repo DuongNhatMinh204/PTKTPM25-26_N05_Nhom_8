@@ -4,12 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nminh.quanlythuvien.enums.OrderStatus;
 import com.nminh.quanlythuvien.enums.PaymentType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

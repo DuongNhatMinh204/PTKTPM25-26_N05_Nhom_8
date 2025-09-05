@@ -2,10 +2,18 @@ package com.nminh.quanlythuvien.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,6 +30,8 @@ public class Book {
     private Integer quantity;
 
     private Double price;
+
+    private String imageUrl;
 
     @OneToMany(mappedBy = "book")
     @JsonIgnore
