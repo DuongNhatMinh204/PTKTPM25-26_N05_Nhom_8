@@ -14,30 +14,16 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+public class Shipper {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String bookName;
+    private String shipperName;
 
-    private String authorship;
+    private String shipperPhone;
 
-    private String bookGerne;
-
-    private String bookPublisher;
-
-    private Integer quantity;
-
-    private Double price;
-
-    private String imageUrl;
-
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "shipper")
     @JsonIgnore
-    private List<OrderDetail> orderDetails;
-
-    @OneToMany(mappedBy = "book")
-    @JsonIgnore
-    private List<WarehouseLog> warehouseLogs;
+    private List<Shipping> shippings;
 }

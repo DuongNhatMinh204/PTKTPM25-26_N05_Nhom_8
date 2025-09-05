@@ -37,6 +37,8 @@ public class BookOrder {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    private String cancelReason;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -44,4 +46,10 @@ public class BookOrder {
     @OneToMany(mappedBy = "orderId")
     @JsonIgnore
     private List<OrderDetail> orderDetail;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_id",referencedColumnName = "id")
+    private Shipping shipping;
+
+
 }
