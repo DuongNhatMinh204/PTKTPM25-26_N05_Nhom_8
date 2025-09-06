@@ -56,6 +56,6 @@ public class UserServiceImpl implements UserService {
         if(!user.getPassword().equals(userSignInRequestDTO.getPassword())){
             throw new AppException(ErrorCode.PASSWORD_INCORRECT);
         }
-        return new UserSignInResponseDTO(user.getPhone(),user.getFullName());
+        return new UserSignInResponseDTO(user.getId(),user.getPhone(),user.getRole());
     }
 }
