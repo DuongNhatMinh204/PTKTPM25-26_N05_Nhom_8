@@ -1,6 +1,7 @@
 package com.nminh.quanlythuvien.controller;
 
 import com.nminh.quanlythuvien.constant.MessageConstant;
+import com.nminh.quanlythuvien.model.request.UserSignInRequestDTO;
 import com.nminh.quanlythuvien.model.request.UserSignUpRequestDTO;
 import com.nminh.quanlythuvien.model.response.ApiResponse;
 import com.nminh.quanlythuvien.service.UserService;
@@ -23,6 +24,12 @@ public class UserController {
         log.info("User signup : {}", userSignUpDTO);
         ApiResponse apiResponse = new ApiResponse(1001, MessageConstant.MESSAGE_SIGN_UP_SUCCESSFUL,userService.signUp(userSignUpDTO));
         return apiResponse;
+    }
 
+    @PostMapping("/signin")
+    public ApiResponse signin(@RequestBody UserSignInRequestDTO userSignInDTO) {
+        log.info("User signin : {}", userSignInDTO);
+        ApiResponse apiResponse = new ApiResponse(1002,userService.signIn(userSignInDTO));
+        return apiResponse;
     }
 }

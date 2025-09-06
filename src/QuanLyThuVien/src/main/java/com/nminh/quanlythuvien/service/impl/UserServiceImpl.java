@@ -4,7 +4,9 @@ import com.nminh.quanlythuvien.constant.Constants;
 import com.nminh.quanlythuvien.entity.User;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.exception.AppException;
+import com.nminh.quanlythuvien.model.request.UserSignInRequestDTO;
 import com.nminh.quanlythuvien.model.request.UserSignUpRequestDTO;
+import com.nminh.quanlythuvien.model.response.UserSignInResponseDTO;
 import com.nminh.quanlythuvien.model.response.UserSignUpResponseDTO;
 import com.nminh.quanlythuvien.repository.UserRepository;
 import com.nminh.quanlythuvien.service.UserService;
@@ -44,5 +46,16 @@ public class UserServiceImpl implements UserService {
 
         return new UserSignUpResponseDTO(user.getPhone(),user.getFullName());
 
+    }
+
+    @Override
+    public UserSignInResponseDTO signIn(UserSignInRequestDTO userSignInRequestDTO) {
+        User user = userRepository.findByPhone(userSignInRequestDTO.getPhone())
+                .orElseThrow(()-> new AppException(ErrorCode.ACCOUNT_NOT_EXISTED));
+
+        if(!user.getPassword().equals(userSignInRequestDTO.getPassword())){
+            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
+        }
+        return new UserSignInResponseDTO(user.getPhone(),user.getFullName());
     }
 }

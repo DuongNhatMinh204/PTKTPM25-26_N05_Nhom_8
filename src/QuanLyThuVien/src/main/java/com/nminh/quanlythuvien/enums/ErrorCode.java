@@ -9,6 +9,8 @@ public enum ErrorCode {
     CONFIRM_PASSWORD_NOT_MATCH(1001,"Confirm password not match", HttpStatus.BAD_REQUEST),
     ARGUMENT_NOT_VALID(1002,"This argument must be not blank or not null", HttpStatus.BAD_REQUEST),
     PHONE_EXISTED(1003,"Phone number existed", HttpStatus.BAD_REQUEST),
+    ACCOUNT_NOT_EXISTED(1004,"Account not existed", HttpStatus.BAD_REQUEST),
+    PASSWORD_INCORRECT(1005,"Password incorrect", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;
