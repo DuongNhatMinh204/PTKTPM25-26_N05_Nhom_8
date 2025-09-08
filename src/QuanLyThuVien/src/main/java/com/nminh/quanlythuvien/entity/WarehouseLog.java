@@ -2,10 +2,8 @@ package com.nminh.quanlythuvien.entity;
 
 import com.nminh.quanlythuvien.enums.ActionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -14,6 +12,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class WarehouseLog {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,6 +30,7 @@ public class WarehouseLog {
     private Integer currentQuantity;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date actionDate;
 
     private String note;
