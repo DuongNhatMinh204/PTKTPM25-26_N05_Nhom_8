@@ -1,17 +1,18 @@
-package com.nminh.quanlythuvien.service;
+package com.nminh.quanlythuvien.service.impl;
 
 import com.nminh.quanlythuvien.entity.Book;
 import com.nminh.quanlythuvien.entity.WarehouseLog;
 import com.nminh.quanlythuvien.enums.ActionType;
 import com.nminh.quanlythuvien.repository.BookRepository;
 import com.nminh.quanlythuvien.repository.WarehouseLogRepository;
+import com.nminh.quanlythuvien.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BookInventoryService {
+public class WarehouseServiceImpl implements WarehouseService {
 
     @Autowired
     private BookRepository bookRepository;
@@ -70,7 +71,7 @@ public class BookInventoryService {
     }
 
     // Ghi log vào WarehouseLog
-    private void log(Book book, ActionType actionType, int preQty, int curQty, String note) {
+    public void log(Book book, ActionType actionType, int preQty, int curQty, String note) {
         WarehouseLog logEntry = WarehouseLog.builder()
                 .book(book)
                 .actionType(actionType)

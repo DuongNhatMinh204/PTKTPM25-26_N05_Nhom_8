@@ -1,7 +1,7 @@
 package com.nminh.quanlythuvien.controller;
 
 import com.nminh.quanlythuvien.entity.Book;
-import com.nminh.quanlythuvien.service.BookInventoryService;
+import com.nminh.quanlythuvien.service.impl.WarehouseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import java.util.Map;
 public class StoreKeeperInventoryController {
 
     @Autowired
-    private BookInventoryService bookInventoryService;
+    private WarehouseServiceImpl bookInventoryServiceImpl;
 
     // GET: Lấy danh sách toàn bộ sách trong kho
     @GetMapping
     public List<Book> getAllBooks() {
-        return bookInventoryService.getAllBooks();
+        return bookInventoryServiceImpl.getAllBooks();
     }
 
     // PUT: Tăng số lượng sách
@@ -29,7 +29,7 @@ public class StoreKeeperInventoryController {
         if (qty <= 0) {
             throw new RuntimeException("Số lượng phải lớn hơn 0");
         }
-        bookInventoryService.increaseQuantity(id, qty);
+        bookInventoryServiceImpl.increaseQuantity(id, qty);
         return ResponseEntity.ok("Cập nhật số lượng sách thành công: +" + qty);
     }
 
@@ -40,7 +40,7 @@ public class StoreKeeperInventoryController {
         if (qty <= 0) {
             throw new RuntimeException("Số lượng phải lớn hơn 0");
         }
-        bookInventoryService.decreaseQuantity(id, qty);
+        bookInventoryServiceImpl.decreaseQuantity(id, qty);
         return ResponseEntity.ok("Cập nhật số lượng sách thành công: -" + qty);
     }
 }

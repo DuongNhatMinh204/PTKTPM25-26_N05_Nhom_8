@@ -1,7 +1,7 @@
 package com.nminh.quanlythuvien.controller;
 
 import com.nminh.quanlythuvien.entity.BookOrder;
-import com.nminh.quanlythuvien.service.BookOrderService;
+import com.nminh.quanlythuvien.service.impl.BookOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class LibrarianOrderController {
 
     @Autowired
-    private BookOrderService bookOrderService;
+    private BookOrderServiceImpl bookOrderService;
 
     // Lấy danh sách tất cả đơn hàng có status APPROVED
     @GetMapping("/approved")
