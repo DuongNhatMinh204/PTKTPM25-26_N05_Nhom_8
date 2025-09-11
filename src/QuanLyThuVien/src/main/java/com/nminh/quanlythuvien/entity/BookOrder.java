@@ -51,5 +51,4 @@ public class BookOrder {
     @JoinColumn(name = "shipping_id",referencedColumnName = "id")
     private Shipping shipping;
 
-
 }

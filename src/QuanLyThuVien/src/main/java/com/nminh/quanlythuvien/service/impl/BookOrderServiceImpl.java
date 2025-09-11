@@ -1,12 +1,26 @@
 package com.nminh.quanlythuvien.service.impl;
 
+import com.nminh.quanlythuvien.entity.Book;
 import com.nminh.quanlythuvien.entity.BookOrder;
+import com.nminh.quanlythuvien.entity.OrderDetail;
+import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.enums.OrderStatus;
+import com.nminh.quanlythuvien.exception.AppException;
+import com.nminh.quanlythuvien.mapper.BookOrderMapper;
+import com.nminh.quanlythuvien.model.request.BookOrderCreateRequest;
+import com.nminh.quanlythuvien.model.request.OrderItemRequest;
+import com.nminh.quanlythuvien.model.response.BookOrderResponse;
 import com.nminh.quanlythuvien.repository.BookOrderRepository;
+import com.nminh.quanlythuvien.repository.BookRepository;
+import com.nminh.quanlythuvien.repository.OrderDetailRepository;
+import com.nminh.quanlythuvien.repository.UserRepository;
 import com.nminh.quanlythuvien.service.BookOrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,6 +28,18 @@ public class BookOrderServiceImpl implements BookOrderService {
 
     @Autowired
     private BookOrderRepository bookOrderRepository;
+
+    @Autowired
+    private BookOrderMapper bookOrderMapper;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public List<BookOrder> getApprovedOrders() {
         return bookOrderRepository.findByOrderStatus(OrderStatus.APPROVED);
@@ -38,5 +64,55 @@ public class BookOrderServiceImpl implements BookOrderService {
         order.setOrderStatus(OrderStatus.CANCELLED);
         order.setCancelReason(cancelReason);
         bookOrderRepository.save(order);
+    }
+
+    @Override
+    public List<BookOrderResponse> orderPendingList() {
+        List<BookOrder> orders = bookOrderRepository.findByOrderStatus(OrderStatus.PENDING);
+        List<BookOrderResponse> responses = new ArrayList<BookOrderResponse>();
+        for (BookOrder order : orders) {
+            BookOrderResponse orderResponse = bookOrderMapper.toBookOrderResponse(order);
+            responses.add(orderResponse);
+        }
+        return responses;
+    }
+
+    @Transactional
+    @Override
+    public String createBookOrder(BookOrderCreateRequest request) {
+        // Tao book order
+        BookOrder bookOrder = new BookOrder();
+
+        bookOrder.setUser(userRepository.findById(request.getUserId()).orElseThrow(()->new AppException(ErrorCode.ACCOUNT_NOT_EXISTED)));
+        bookOrder.setAddress(request.getAddress());
+        bookOrder.setPaymentType(request.getPaymentType());
+        bookOrder.setOrderStatus(OrderStatus.PENDING);
+        Double totalPrice = 0.0;
+
+        bookOrderRepository.save(bookOrder);
+
+        // Tạo OrderDetail cho từng sách
+        for(OrderItemRequest item : request.getOrderItems()) {
+            Book book = bookRepository.findById(item.getBookId())
+                    .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+            if(book.getQuantity() < item.getQuantity()) {
+                throw new AppException(ErrorCode.NOT_ENOUGH_STOCK);
+            }
+            Double price = book.getPrice() * item.getQuantity();
+            totalPrice += price;
+
+            OrderDetail orderDetail = new OrderDetail();
+
+            orderDetail.setBook(book);
+            orderDetail.setPrice(price);
+            orderDetail.setQuantity(item.getQuantity());
+            orderDetail.setOrderId(bookOrder);
+
+            orderDetailRepository.save(orderDetail);
+        }
+        // Update total price
+        bookOrder.setTotalPrice(totalPrice);
+        bookOrderRepository.save(bookOrder);
+        return "Create Book Order Success";
     }
 }
