@@ -2,13 +2,13 @@ Dự Án Xây Dựng Ứng Dụng Trang Web Cửa Hàng Sách Online
 
 Danh sách thành viên :
 
-    -Dương Nhật Minh
+    -Dương Nhật Minh 22010366
 
-    -Nguyễn Thị Kiều Loan
+    -Nguyễn Thị Kiều Loan 22010278
 
-    -Hà Nam Khánh 
+    -Hà Nam Khánh 22010149
 
-    -Đoàn Tiến Dũng
+    -Đoàn Tiến Dũng 22010133
 Giới Thiệu
 Dự án **Hệ thống Cửa Hàng Sách Online** cho phép khách hàng tìm kiếm, đặt sách và thanh toán trực tuyến.  
 Quản trị viên có thể quản lý sản phẩm, đơn hàng và người dùng. Thủ kho có thể quản lý hàng tồn và xác nhận đơn hàng.  
