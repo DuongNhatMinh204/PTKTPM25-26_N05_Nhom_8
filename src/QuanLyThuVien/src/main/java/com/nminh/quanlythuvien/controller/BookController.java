@@ -35,4 +35,10 @@ public class BookController {
         return  apiResponse;
     }
 
+    @GetMapping("/get-all")
+    public ApiResponse getAllBookActive() {
+        log.info("getAllBook");
+        ApiResponse apiResponse = new ApiResponse(bookService.getAllBooksActive());
+        return  apiResponse;
+    }
 }

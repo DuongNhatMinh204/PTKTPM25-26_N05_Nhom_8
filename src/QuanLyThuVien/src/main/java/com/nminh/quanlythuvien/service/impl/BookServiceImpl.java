@@ -7,13 +7,19 @@ import com.nminh.quanlythuvien.entity.WarehouseLog;
 import com.nminh.quanlythuvien.enums.ActionType;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.exception.AppException;
+import com.nminh.quanlythuvien.mapper.BookMapper;
 import com.nminh.quanlythuvien.model.request.BookDTORequest;
+import com.nminh.quanlythuvien.model.response.BookDtoResponse;
 import com.nminh.quanlythuvien.model.response.BookUpdateDtoResponse;
 import com.nminh.quanlythuvien.repository.BookRepository;
 import com.nminh.quanlythuvien.repository.WarehouseLogRepository;
 import com.nminh.quanlythuvien.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -22,6 +28,10 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private WarehouseLogRepository warehouseLogRepository;
+
+    @Autowired
+    private BookMapper bookMapper;
+
     @Override
     public String addBook(BookDTORequest bookDTORequest) {
         Book book = Book.builder()
@@ -79,6 +89,20 @@ public class BookServiceImpl implements BookService {
                 .quantity(bookUpdated.getQuantity())
                 .imageUrl(bookUpdated.getImageUrl())
                 .build();
+    }
+
+    @Override
+    public List<BookDtoResponse> getAllBooksActive() {
+        List<Book> books = bookRepository.findAll();
+        List<BookDtoResponse> bookDtoResponseList = new ArrayList<>();
+        for (Book book : books) {
+            if(Objects.equals(book.getStatus(), Constants.INACTIVE_STATUS)) {
+                continue;
+            }
+            BookDtoResponse bookDtoResponse = bookMapper.toBookDto(book);
+            bookDtoResponseList.add(bookDtoResponse);
+        }
+        return bookDtoResponseList;
     }
 
 
