@@ -31,6 +31,8 @@ public class Book {
 
     private String imageUrl;
 
+    private Integer status;
+
     @OneToMany(mappedBy = "book")
     @JsonIgnore
     private List<OrderDetail> orderDetails;

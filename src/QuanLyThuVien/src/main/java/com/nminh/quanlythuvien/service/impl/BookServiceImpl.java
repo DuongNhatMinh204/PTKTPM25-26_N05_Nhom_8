@@ -1,5 +1,6 @@
 package com.nminh.quanlythuvien.service.impl;
 
+import com.nminh.quanlythuvien.constant.Constants;
 import com.nminh.quanlythuvien.constant.MessageConstant;
 import com.nminh.quanlythuvien.entity.Book;
 import com.nminh.quanlythuvien.entity.WarehouseLog;
@@ -28,6 +29,7 @@ public class BookServiceImpl implements BookService {
                 .price(bookDTORequest.getPrice())
                 .quantity(bookDTORequest.getQuantity())
                 .imageUrl(bookDTORequest.getImageUrl())
+                .status(Constants.INACTIVE_STATUS)
                 .build();
         bookRepository.save(book);
         WarehouseLog warehouseLog = WarehouseLog.builder()
