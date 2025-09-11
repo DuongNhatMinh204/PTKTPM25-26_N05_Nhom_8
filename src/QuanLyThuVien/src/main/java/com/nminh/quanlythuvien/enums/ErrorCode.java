@@ -12,6 +12,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_EXISTED(1004,"Account not existed", HttpStatus.BAD_REQUEST),
     PASSWORD_INCORRECT(1005,"Password incorrect", HttpStatus.BAD_REQUEST),
     PRICE_NOT_VALID(1006,"Price must be >= 0 ", HttpStatus.BAD_REQUEST),
+    BOOK_NOT_EXISTED(1007,"Booking not existed", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

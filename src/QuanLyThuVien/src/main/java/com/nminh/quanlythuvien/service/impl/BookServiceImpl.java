@@ -5,7 +5,10 @@ import com.nminh.quanlythuvien.constant.MessageConstant;
 import com.nminh.quanlythuvien.entity.Book;
 import com.nminh.quanlythuvien.entity.WarehouseLog;
 import com.nminh.quanlythuvien.enums.ActionType;
+import com.nminh.quanlythuvien.enums.ErrorCode;
+import com.nminh.quanlythuvien.exception.AppException;
 import com.nminh.quanlythuvien.model.request.BookDTORequest;
+import com.nminh.quanlythuvien.model.response.BookUpdateDtoResponse;
 import com.nminh.quanlythuvien.repository.BookRepository;
 import com.nminh.quanlythuvien.repository.WarehouseLogRepository;
 import com.nminh.quanlythuvien.service.BookService;
@@ -42,4 +45,41 @@ public class BookServiceImpl implements BookService {
         warehouseLogRepository.save(warehouseLog);
         return MessageConstant.MESSAGE_ADD_NEW_BOOK;
     }
+
+    @Override
+    public String deleteBook(String bookId) {
+        Book bookDeleted = bookRepository.findById(bookId)
+                .orElseThrow(()-> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+        bookDeleted.setStatus(Constants.INACTIVE_STATUS);
+        bookRepository.save(bookDeleted);
+        return MessageConstant.MESSAGE_DELETE_BOOK;
+    }
+
+    @Override
+    public BookUpdateDtoResponse updateBook(String id, BookDTORequest bookDTORequest) {
+        Book bookUpdated = bookRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+
+        bookUpdated.setBookName(bookDTORequest.getBookName());
+        bookUpdated.setBookPublisher(bookDTORequest.getBookPublisher());
+        bookUpdated.setBookGerne(bookDTORequest.getBookGerne());
+        bookUpdated.setAuthorship(bookDTORequest.getAuthorship());
+        bookUpdated.setPrice(bookDTORequest.getPrice());
+        bookUpdated.setQuantity(bookDTORequest.getQuantity());
+        bookUpdated.setImageUrl(bookDTORequest.getImageUrl());
+        bookUpdated.setStatus(Constants.ACTIVE_STATUS);
+
+        bookRepository.save(bookUpdated);
+        return BookUpdateDtoResponse.builder()
+                .bookName(bookUpdated.getBookName())
+                .bookPublisher(bookUpdated.getBookPublisher())
+                .bookGerne(bookUpdated.getBookGerne())
+                .authorship(bookUpdated.getAuthorship())
+                .price(bookUpdated.getPrice())
+                .quantity(bookUpdated.getQuantity())
+                .imageUrl(bookUpdated.getImageUrl())
+                .build();
+    }
+
+
 }
