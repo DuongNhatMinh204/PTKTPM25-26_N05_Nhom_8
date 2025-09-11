@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // Xử lý đăng nhập
-document.getElementById("loginForm").addEventListener("submit", function(event) {
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const phone = document.getElementById("phone").value;
@@ -23,23 +23,40 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         password: password
     };
 
-    fetch("http://localhost:8080/api/users/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(loginData)
-    })
-        .then(res => {
-            if (res.ok) {
-                alert("Đăng nhập thành công!");
-                window.location.href = "index.html";
-            } else {
-                alert("Sai số điện thoại hoặc mật khẩu!");
-            }
+    try{
+        const response = await fetch("/user/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginData)
         })
-        .catch(error => {
-            console.error("Lỗi:", error);
-            alert("Đã xảy ra lỗi.");
-        });
+
+        const result = await response.json();
+
+        if(result.code === 1002){
+            // Lưu id và phone vào localStorage
+            localStorage.setItem("userId", result.data.id);
+            localStorage.setItem("userPhone", result.data.phone);
+            if(result.data.role === "ROLE_USER"){
+                window.location.href = "/user"
+            }
+            if(result.data.role === "ROLE_ADMIN"){
+                window.location.href = "/admin"
+            }
+            if(result.data.role === "ROLE_STORE_KEEPER"){
+                window.location.href = "/storekeeper"
+            }
+            if(result.data.role === "ROLE_SHIPPER"){
+                window.location.href = "/shipper"
+            }
+        }else {
+            alert(`❌ Đăng ký thất bại: ${result.message}`)
+        }
+    }catch (error){
+        console.error("Error : ", error);
+        alert("Không thể kết nối tới server. Vui lòng thử lại sau.")
+
+    }
+
 });

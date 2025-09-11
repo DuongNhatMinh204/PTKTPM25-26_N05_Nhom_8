@@ -12,37 +12,51 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // Xử lý đăng ký
-document.getElementById("registerForm").addEventListener("submit", function(event) {
+document.getElementById("registerForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
+    // Lấy dữ liệu từ form
+    const fullName = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmpassword").value.trim();
+    const birthday = document.getElementById("birthday").value;
+    const gender = document.getElementById("gender").value;
+
+    // Format ngày sinh (yyyy-mm-dd -> dd-MM-yyyy)
+    const formattedBirthday = birthday.split("-").reverse().join("-");
+
+    // Tạo object để gửi đi
     const userData = {
-        fullName: document.getElementById("fullName").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        password: document.getElementById("password").value,
-        birthday: document.getElementById("birthday").value,
-        gender: document.getElementById("gender").value,
-        role: "user",
-        status: 1
+        fullName,
+        email,
+        phone,
+        password,
+        confirmPassword,
+        birthday: formattedBirthday,
+        gender
     };
 
-    fetch("http://localhost:8080/api/users/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData)
-    })
-        .then(res => {
-            if (res.ok) {
-                alert("Đăng ký thành công!");
-                window.location.href = "login.html";
-            } else {
-                alert("Đăng ký thất bại!");
-            }
-        })
-        .catch(error => {
-            console.error("Lỗi:", error);
-            alert("Đã xảy ra lỗi.");
+    try {
+        const response = await fetch("/user/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
         });
+
+        const result = await response.json();
+
+        if (result.code === 1001) {
+            alert(`🎉 ${result.message}\nChào mừng ${result.data.fullName}!`);
+            window.location.href = "/login"; // chuyển sang trang đăng nhập
+        } else {
+            alert(`❌ Đăng ký thất bại: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        alert("Không thể kết nối tới server. Vui lòng thử lại sau.");
+    }
 });
