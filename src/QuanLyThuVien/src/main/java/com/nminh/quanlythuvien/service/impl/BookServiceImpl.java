@@ -113,5 +113,26 @@ public class BookServiceImpl implements BookService {
         return response;
     }
 
+    @Override
+    public Object searchBook(Integer page, Integer size,String keyword) {
+        PageRequest pageable = PageRequest.of(page-1, size);
+        String keywordAdd = "%"+keyword+"%";
+        Page<Book> listPageable = bookRepository.findByKeyword(keywordAdd,pageable);
+
+        List<BookDtoResponse> bookDtoResponseList = listPageable
+                .getContent()
+                .stream()
+                .map(bookMapper::toBookDto)
+                .toList();
+
+        Map<String,Object> response = new HashMap<>();
+        response.put("books", bookDtoResponseList);
+        response.put("currentPage", listPageable.getNumber()+1);
+        response.put("totalPages", listPageable.getTotalPages());
+        response.put("totalElements", listPageable.getTotalElements());
+
+        return response;
+    }
+
 
 }

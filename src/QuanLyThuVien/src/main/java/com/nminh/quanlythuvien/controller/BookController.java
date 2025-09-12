@@ -43,4 +43,13 @@ public class BookController {
         return  apiResponse;
     }
 
+    @GetMapping("/search")
+    public ApiResponse searchBook(@RequestParam(name = "page",required = false,defaultValue = "1")Integer page,
+                                  @RequestParam(name = "size",required = false,defaultValue = "5") Integer size,
+                                  @RequestParam(name = "keyword") String keyword) {
+        log.info("searchBook : {}", keyword);
+        ApiResponse apiResponse = new ApiResponse(bookService.searchBook(page,size,keyword));
+        return  apiResponse;
+
+    }
 }

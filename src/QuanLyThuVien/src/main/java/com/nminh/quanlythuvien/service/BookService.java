@@ -12,4 +12,5 @@ public interface BookService {
     String deleteBook(String bookId);
     BookUpdateDtoResponse updateBook(String id, BookDTORequest bookDTORequest);
     Object getAllBooksActive(Integer page, Integer size);
+    Object searchBook(Integer page, Integer size,String keyword);
 }

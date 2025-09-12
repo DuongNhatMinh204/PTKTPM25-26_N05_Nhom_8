@@ -228,3 +228,79 @@ document.getElementById("addBookForm").addEventListener("submit", async (e) => {
 
 // Load khi mở trang
 loadBooks();
+
+// Hàm tìm kiếm
+async function searchBooks(page = 1) {
+    const keyword = document.getElementById("searchKeyword").value.trim();
+    if (!keyword) {
+        loadBooks(page); // nếu trống thì load toàn bộ
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/search?page=${page}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}`);
+        const result = await response.json();
+
+        if (result.code === 1000) {
+            const tbody = document.querySelector("#bookTable tbody");
+            tbody.innerHTML = "";
+
+            result.data.books.forEach(book => {
+                const row = `
+                    <tr>
+                        <td><img src="${book.imageUrl}" alt="Book Image"></td>
+                        <td>${book.bookName}</td>
+                        <td>${book.authorship}</td>
+                        <td>${book.bookGerne}</td>
+                        <td>${book.bookPublisher}</td>
+                        <td>${book.quantity}</td>
+                        <td>${book.price} $</td>
+                        <td>
+                            <button class="btn-update" onclick="updateBook('${book.id}')">Cập Nhật</button>
+                            <button class="btn-delete" onclick="deleteBook('${book.id}')">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            // cập nhật phân trang
+            currentPage = result.data.currentPage;
+            totalPages = result.data.totalPages;
+
+            // gắn phân trang để gọi lại search thay vì loadAll
+            renderPaginationSearch(keyword);
+        }
+    } catch (error) {
+        console.error("Error searching books:", error);
+    }
+}
+
+// Render phân trang cho tìm kiếm
+function renderPaginationSearch(keyword) {
+    const paginationDiv = document.getElementById("pagination");
+    paginationDiv.innerHTML = "";
+
+    // Previous
+    const prevBtn = document.createElement("button");
+    prevBtn.innerText = "«";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => searchBooks(currentPage - 1);
+    paginationDiv.appendChild(prevBtn);
+
+    // Số trang
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i;
+        btn.classList.toggle("active", i === currentPage);
+        btn.onclick = () => searchBooks(i);
+        paginationDiv.appendChild(btn);
+    }
+
+    // Next
+    const nextBtn = document.createElement("button");
+    nextBtn.innerText = "»";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => searchBooks(currentPage + 1);
+    paginationDiv.appendChild(nextBtn);
+}

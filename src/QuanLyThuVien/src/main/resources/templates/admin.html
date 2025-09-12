@@ -19,7 +19,13 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1>Danh Sách Sách</h1>
+        <h1>
+            Danh Sách Sách
+        </h1>
+        <div class="search-box">
+            <input type="text" id="searchKeyword" placeholder="Tìm kiếm sách...">
+            <button onclick="searchBooks()">🔍</button>
+        </div>
         <button class="btn-add" onclick="openAddModal()">+ Thêm Sách</button>
 
         <table id="bookTable">
