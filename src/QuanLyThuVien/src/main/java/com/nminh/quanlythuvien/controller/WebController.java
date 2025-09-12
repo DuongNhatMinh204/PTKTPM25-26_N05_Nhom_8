@@ -1,0 +1,32 @@
+package com.nminh.quanlythuvien.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class WebController {
+    @GetMapping("/register")
+    public String register(){
+        return "register";
+    }
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+    @GetMapping("/admin")
+    public String admin(){
+        return "admin";
+    }
+    @GetMapping("/storekeeper")
+    public String storekeepper(){
+        return "storekeeper";
+    }
+    @GetMapping("/user")
+    public String user(){
+        return "user";
+    }
+    @GetMapping("/shipper")
+    public String shipper(){
+        return "shipper";
+    }
+}

@@ -1,0 +1,175 @@
+/* RESET & FONT */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* BODY */
+body {
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    background-color: #2e7d32;
+    color: white;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+header .logo h1 {
+    font-size: 28px;
+}
+
+header nav a {
+    color: white;
+    margin-left: 25px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+header nav a:hover,
+header nav a.active {
+    text-decoration: underline;
+}
+
+/* MAIN */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+/* REGISTER CONTAINER */
+.register-container {
+    background-color: #e8f5e9;
+    padding: 50px 60px;
+    border-radius: 14px;
+    width: 600px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    /* Animation mặc định */
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+/* Hiệu ứng fade + slide up */
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Khi DOMContentLoaded sẽ thêm animation bằng JS */
+
+/* FORM INPUTS */
+form input,
+form select {
+    width: 100%;
+    padding: 18px;
+    margin: 16px 0;
+    border: 1px solid #c8e6c9;
+    border-radius: 6px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+form label {
+    text-align: left;
+    display: block;
+    color: #2e7d32;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+form input:focus,
+form select:focus {
+    border-color: #66bb6a;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+    outline: none;
+}
+
+/* FORM TITLE */
+.register-container h2 {
+    margin-bottom: 30px;
+    color: #1b5e20;
+    font-size: 34px;
+}
+
+/* BUTTON */
+form button {
+    width: 100%;
+    padding: 18px;
+    background-color: #43a047;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background-color: #2e7d32;
+    transform: scale(1.02);
+}
+
+/* LINK */
+p {
+    margin-top: 24px;
+    font-size: 16px;
+}
+
+a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* FOOTER */
+footer {
+    background-color: #f1f8e9;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #555;
+    border-top: 1px solid #ddd;
+}
+
+footer a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 500;
+}

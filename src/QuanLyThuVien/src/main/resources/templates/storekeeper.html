@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Quản lý Thủ Kho</title>
+    <link rel="stylesheet" href="/css/storekeeper.css" />
+</head>
+<body>
+<h1>📚 Trang Quản Lý Thủ Kho</h1>
+
+<!-- Tabs để chuyển đổi giữa các chức năng -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="showTab('orders')">Đơn Hàng Đã Duyệt</button>
+    <button class="tab-btn" onclick="showTab('inventory')">Quản Lý Kho Sách</button>
+    <button class="tab-btn" onclick="showTab('logs')">Lịch Sử Log Kho</button>
+</div>
+
+<!-- Phần Đơn Hàng Đã Duyệt (giữ nguyên chức năng đã có) -->
+<div id="orders" class="tab-content" style="display: block;">
+    <h2>📚 Danh sách đơn hàng đã duyệt</h2>
+    <div id="orders-container"></div>
+</div>
+
+<!-- Phần Quản Lý Kho Sách (chức năng cập nhật số sách tồn kho, thêm/bớt) -->
+<div id="inventory" class="tab-content" style="display: none;">
+    <h2>📚 Danh sách sách trong kho</h2>
+    <div id="books"></div>
+</div>
+
+<!-- Phần Xem Lịch Sử Log -->
+<div id="logs" class="tab-content" style="display: none;">
+    <h2>📚 Lịch sử log kho</h2>
+    <div id="logs-container"></div>
+    <div>
+        <input id="bookIdInput" type="text" placeholder="Nhập mã sách để lọc" />
+        <button onclick="loadLogsByBook()">Tìm theo sách</button>
+    </div>
+</div>
+
+<script src="/js/storekeeper.js"></script>
+</body>
+</html>

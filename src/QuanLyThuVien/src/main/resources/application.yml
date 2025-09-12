@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: QuanLyThuVien
+  datasource:
+    url: jdbc:mysql://localhost:3306/qlythuvien
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

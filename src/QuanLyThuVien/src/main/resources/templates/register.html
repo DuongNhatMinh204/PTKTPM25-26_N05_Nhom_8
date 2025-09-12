@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký - Quản lý Thư viện</title>
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/29/29302.png">
+</head>
+<body>
+<!-- HEADER -->
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Logo Thư viện">
+        <h1>Quản lý Thư viện</h1>
+    </div>
+    <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="register.html" class="active">Đăng ký</a>
+        <a href="login.html">Đăng nhập</a>
+    </nav>
+</header>
+
+<!-- MAIN REGISTER -->
+<main>
+    <div class="register-container">
+        <h2>Đăng ký tài khoản</h2>
+        <form id="registerForm">
+            <input type="text" id="fullName" placeholder="Họ và tên" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Số điện thoại" required>
+            <input type="password" id="password" placeholder="Mật khẩu" required>
+            <input type="password" id="confirmpassword" placeholder="Nhập lại mật khẩu" required>
+            <label for="birthday">Ngày sinh:</label>
+            <input type="date" id="birthday" required>
+            <select id="gender" required>
+                <option value="">Chọn giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+            <button type="submit">Đăng ký</button>
+        </form>
+        <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <p>&copy; 2025 Quản lý Thư viện | Liên hệ: <a href="mailto:contact@library.vn">contact@library.vn</a></p>
+</footer>
+
+<script src="/js/register.js"></script>
+</body>
+</html>
