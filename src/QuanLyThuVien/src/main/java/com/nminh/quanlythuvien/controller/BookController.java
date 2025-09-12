@@ -36,9 +36,11 @@ public class BookController {
     }
 
     @GetMapping("/get-all")
-    public ApiResponse getAllBookActive() {
+    public ApiResponse getAllBookActive(@RequestParam(name = "page",required = false,defaultValue = "1") Integer page,
+                                        @RequestParam(name = "size",required = false,defaultValue = "5") Integer size) {
         log.info("getAllBook");
-        ApiResponse apiResponse = new ApiResponse(bookService.getAllBooksActive());
+        ApiResponse apiResponse = new ApiResponse(bookService.getAllBooksActive(page,size));
         return  apiResponse;
     }
+
 }

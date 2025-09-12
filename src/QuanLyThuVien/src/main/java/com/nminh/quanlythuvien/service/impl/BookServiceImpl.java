@@ -15,11 +15,11 @@ import com.nminh.quanlythuvien.repository.BookRepository;
 import com.nminh.quanlythuvien.repository.WarehouseLogRepository;
 import com.nminh.quanlythuvien.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
                 .price(bookDTORequest.getPrice())
                 .quantity(bookDTORequest.getQuantity())
                 .imageUrl(bookDTORequest.getImageUrl())
-                .status(Constants.INACTIVE_STATUS)
+                .status(Constants.ACTIVE_STATUS)
                 .build();
         bookRepository.save(book);
         WarehouseLog warehouseLog = WarehouseLog.builder()
@@ -92,17 +92,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDtoResponse> getAllBooksActive() {
-        List<Book> books = bookRepository.findAll();
-        List<BookDtoResponse> bookDtoResponseList = new ArrayList<>();
-        for (Book book : books) {
-            if(Objects.equals(book.getStatus(), Constants.INACTIVE_STATUS)) {
-                continue;
-            }
-            BookDtoResponse bookDtoResponse = bookMapper.toBookDto(book);
-            bookDtoResponseList.add(bookDtoResponse);
-        }
-        return bookDtoResponseList;
+    public Object getAllBooksActive(Integer page, Integer size) {
+        PageRequest pageable = PageRequest.of(page-1, size);
+
+        Page<Book> booksPage = bookRepository.findByStatus(Constants.ACTIVE_STATUS,pageable);
+
+        List<BookDtoResponse> bookDtoResponseList = booksPage
+                .getContent()
+                .stream()
+                .map(bookMapper::toBookDto)
+                .toList();
+
+        Map<String,Object> response = new HashMap<>();
+
+        response.put("books", bookDtoResponseList);
+        response.put("currentPage", booksPage.getNumber()+1);
+        response.put("totalPages", booksPage.getTotalPages());
+        response.put("totalElements", booksPage.getTotalElements());
+
+        return response;
     }
 
 
