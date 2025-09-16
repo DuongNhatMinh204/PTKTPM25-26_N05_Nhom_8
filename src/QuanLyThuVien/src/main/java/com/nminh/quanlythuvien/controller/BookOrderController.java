@@ -32,4 +32,18 @@ public class BookOrderController {
         return new ApiResponse(bookOrderService.createBookOrder(bookOrderCreateRequest));
     }
 
+    // Xác nhận đơn hàng dành cho admin
+    @PutMapping("/admin-confirm/{id}")
+    public ApiResponse confirmBookOrder(@PathVariable String id){
+        log.info("Admin confirm book order : {} ",id);
+        ApiResponse apiResponse = new ApiResponse(bookOrderService.confirmBookOrderToAproved(id));
+        return apiResponse;
+    }
+
+    @GetMapping("/detail/{id}")
+    public ApiResponse detailBookOrder(@PathVariable String id){
+        log.info("detail book order : {} ",id);
+        ApiResponse apiResponse = new ApiResponse(bookOrderService.orderDetailList(id));
+        return apiResponse;
+    }
 }

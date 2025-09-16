@@ -3,12 +3,14 @@ package com.nminh.quanlythuvien.service.impl;
 import com.nminh.quanlythuvien.entity.Book;
 import com.nminh.quanlythuvien.entity.BookOrder;
 import com.nminh.quanlythuvien.entity.OrderDetail;
+import com.nminh.quanlythuvien.entity.Shipping;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.enums.OrderStatus;
 import com.nminh.quanlythuvien.exception.AppException;
 import com.nminh.quanlythuvien.mapper.BookOrderMapper;
 import com.nminh.quanlythuvien.model.request.BookOrderCreateRequest;
 import com.nminh.quanlythuvien.model.request.OrderItemRequest;
+import com.nminh.quanlythuvien.model.response.BookOrderDetailResponse;
 import com.nminh.quanlythuvien.model.response.BookOrderResponse;
 import com.nminh.quanlythuvien.repository.BookOrderRepository;
 import com.nminh.quanlythuvien.repository.BookRepository;
@@ -113,6 +115,45 @@ public class BookOrderServiceImpl implements BookOrderService {
         // Update total price
         bookOrder.setTotalPrice(totalPrice);
         bookOrderRepository.save(bookOrder);
+
         return "Create Book Order Success";
+    }
+
+    @Override
+    public String confirmBookOrderToAproved(String id) {
+        BookOrder bookOrder = bookOrderRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_ORDER_NOT_EXISTED));
+        bookOrder.setOrderStatus(OrderStatus.APPROVED);
+        bookOrderRepository.save(bookOrder);
+        return "Confirm Book To Approved Order Success";
+    }
+
+    @Override
+    public List<BookOrderDetailResponse> orderDetailList(String id) {
+        BookOrder bookOrder = bookOrderRepository.findById(id).get();
+
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(bookOrder)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_EXISTED));
+
+        List<BookOrderDetailResponse> responses = new ArrayList<>();
+
+        for(OrderDetail orderDetail : orderDetailList) {
+            BookOrderDetailResponse orderDetailResponse = new BookOrderDetailResponse();
+
+            Book book = orderDetail.getBook();
+
+            orderDetailResponse.setId(book.getId());
+            orderDetailResponse.setBookName(book.getBookName());
+            orderDetailResponse.setPrice(book.getPrice());
+            orderDetailResponse.setQuantity(orderDetail.getQuantity());
+            orderDetailResponse.setAuthorship(book.getAuthorship());
+            orderDetailResponse.setBookGerne(book.getBookGerne());
+            orderDetailResponse.setBookPublisher(book.getBookPublisher());
+            orderDetailResponse.setImageUrl(book.getImageUrl());
+
+            responses.add(orderDetailResponse);
+        }
+        return responses;
+
     }
 }

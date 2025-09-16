@@ -14,6 +14,8 @@ public enum ErrorCode {
     PRICE_NOT_VALID(1006,"Price must be >= 0 ", HttpStatus.BAD_REQUEST),
     BOOK_NOT_EXISTED(1007,"Book not existed", HttpStatus.BAD_REQUEST),
     NOT_ENOUGH_STOCK(1008,"Not enough stock", HttpStatus.BAD_REQUEST),
+    BOOK_ORDER_NOT_EXISTED(1009,"Book order not existed", HttpStatus.BAD_REQUEST),
+    ORDER_DETAIL_NOT_EXISTED(1010,"Order detail not existed", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;
