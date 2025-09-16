@@ -29,4 +29,6 @@ public class WebController {
     public String shipper(){
         return "shipper";
     }
+    @GetMapping("/admin_orders")
+    public String adminorders(){return "admin_orders";}
 }
