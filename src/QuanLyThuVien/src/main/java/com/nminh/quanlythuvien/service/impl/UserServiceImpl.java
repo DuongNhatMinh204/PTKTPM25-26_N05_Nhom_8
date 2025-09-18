@@ -4,8 +4,10 @@ import com.nminh.quanlythuvien.constant.Constants;
 import com.nminh.quanlythuvien.entity.User;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.exception.AppException;
+import com.nminh.quanlythuvien.mapper.UserMapper;
 import com.nminh.quanlythuvien.model.request.UserSignInRequestDTO;
 import com.nminh.quanlythuvien.model.request.UserSignUpRequestDTO;
+import com.nminh.quanlythuvien.model.response.UserInfoResponse;
 import com.nminh.quanlythuvien.model.response.UserSignInResponseDTO;
 import com.nminh.quanlythuvien.model.response.UserSignUpResponseDTO;
 import com.nminh.quanlythuvien.repository.UserRepository;
@@ -13,12 +15,16 @@ import com.nminh.quanlythuvien.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public UserSignUpResponseDTO signUp(UserSignUpRequestDTO userSignUpRequestDTO) {
@@ -73,5 +79,19 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
         return "Change status success";
+    }
+
+    @Override
+    public List<UserInfoResponse> allUserInfo() {
+        List<User> users = userRepository.findAll();
+        List<UserInfoResponse> userInfoResponses = new ArrayList<>();
+        for(User user : users){
+            if(user.getPhone().equals("0000000000")){
+                continue;
+            }
+            UserInfoResponse userInfoResponse = userMapper.toUserInfoResponse(user);
+            userInfoResponses.add(userInfoResponse);
+        }
+        return userInfoResponses;
     }
 }

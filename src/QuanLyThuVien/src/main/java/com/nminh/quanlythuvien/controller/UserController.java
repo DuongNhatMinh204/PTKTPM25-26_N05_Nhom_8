@@ -36,4 +36,11 @@ public class UserController {
         ApiResponse apiResponse = new ApiResponse(1003,userService.changeStatus(id));
         return apiResponse;
     }
+
+    @GetMapping("/get-all")
+    public ApiResponse getAll() {
+        log.info("User getAll");
+        ApiResponse apiResponse = new ApiResponse(1004,userService.allUserInfo());
+        return apiResponse;
+    }
 }
