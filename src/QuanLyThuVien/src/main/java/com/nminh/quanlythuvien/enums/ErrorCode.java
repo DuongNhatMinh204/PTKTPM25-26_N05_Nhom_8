@@ -16,6 +16,7 @@ public enum ErrorCode {
     NOT_ENOUGH_STOCK(1008,"Not enough stock", HttpStatus.BAD_REQUEST),
     BOOK_ORDER_NOT_EXISTED(1009,"Book order not existed", HttpStatus.BAD_REQUEST),
     ORDER_DETAIL_NOT_EXISTED(1010,"Order detail not existed", HttpStatus.BAD_REQUEST),
+    ACCOUNT_LOCKED(1011,"Account locked", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

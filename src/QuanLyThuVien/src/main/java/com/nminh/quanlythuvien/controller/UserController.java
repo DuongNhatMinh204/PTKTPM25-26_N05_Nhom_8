@@ -7,10 +7,7 @@ import com.nminh.quanlythuvien.model.response.ApiResponse;
 import com.nminh.quanlythuvien.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -30,6 +27,13 @@ public class UserController {
     public ApiResponse signin(@RequestBody UserSignInRequestDTO userSignInDTO) {
         log.info("User signin : {}", userSignInDTO);
         ApiResponse apiResponse = new ApiResponse(1002,userService.signIn(userSignInDTO));
+        return apiResponse;
+    }
+
+    @PutMapping("/change-status/{id}")
+    public ApiResponse changeStatus(@PathVariable String id) {
+        log.info("User lock : {}", id);
+        ApiResponse apiResponse = new ApiResponse(1003,userService.changeStatus(id));
         return apiResponse;
     }
 }

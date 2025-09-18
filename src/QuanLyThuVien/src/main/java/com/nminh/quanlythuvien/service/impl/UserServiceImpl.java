@@ -56,6 +56,22 @@ public class UserServiceImpl implements UserService {
         if(!user.getPassword().equals(userSignInRequestDTO.getPassword())){
             throw new AppException(ErrorCode.PASSWORD_INCORRECT);
         }
+
+        if(user.getStatus().equals(Constants.INACTIVE_STATUS)){
+            throw new AppException(ErrorCode.ACCOUNT_LOCKED);
+        }
         return new UserSignInResponseDTO(user.getId(),user.getPhone(),user.getRole());
+    }
+
+    @Override
+    public String changeStatus(String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user.getStatus().equals(Constants.ACTIVE_STATUS)){
+            user.setStatus(Constants.INACTIVE_STATUS);
+        }else {
+            user.setStatus(Constants.ACTIVE_STATUS);
+        }
+        userRepository.save(user);
+        return "Change status success";
     }
 }
