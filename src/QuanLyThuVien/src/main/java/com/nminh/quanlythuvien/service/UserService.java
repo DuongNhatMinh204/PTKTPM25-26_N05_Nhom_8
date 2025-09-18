@@ -9,4 +9,5 @@ import com.nminh.quanlythuvien.model.response.UserSignUpResponseDTO;
 public interface UserService {
     UserSignUpResponseDTO signUp(UserSignUpRequestDTO userSignUpRequestDTO);
     UserSignInResponseDTO signIn(UserSignInRequestDTO userSignInRequestDTO);
+    String changeStatus(String userId);
 }
