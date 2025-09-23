@@ -29,23 +29,61 @@ function loadBooks() {
 function showDetail(book) {
     const modal = document.getElementById("detailModal");
     const detail = document.getElementById("bookDetail");
+
     detail.innerHTML = `
-        <h2>${book.bookName}</h2>
-        <img src="${book.imageUrl}" style="width:200px"><br>
-        <p><b>Tác giả:</b> ${book.authorship}</p>
-        <p><b>Thể loại:</b> ${book.bookGerne}</p>
-        <p><b>NXB:</b> ${book.bookPublisher}</p>
-        <p><b>Số lượng:</b> ${book.quantity}</p>
-        <p><b>Giá:</b> ${book.price} ₫</p>
+        <div class="book-left">
+            <img src="${book.imageUrl}" alt="${book.bookName}">
+            <h2>${book.bookName}</h2>
+        </div>
+        <div class="book-right">
+            <p><strong>Tác giả:</strong> ${book.authorship}</p>
+            <p><strong>Thể loại:</strong> ${book.bookGerne}</p>
+            <p><strong>NXB:</strong> ${book.bookPublisher}</p>
+            <p><strong>Kho:</strong> ${book.quantity}</p>
+            <p><strong>Giá:</strong> <span class="price">${book.price} ₫</span></p>
+            <div class="action">
+                <label for="quantity">Số lượng:</label>
+                <input type="number" id="quantity" value="1" min="1" max="${book.quantity}">
+                <button id="addCartBtn" class="add-cart">🛒 Thêm vào giỏ hàng</button>
+            </div>
+        </div>
     `;
-    modal.style.display = "block";
+
+    // Gắn sự kiện vào nút sau khi render
+    document.getElementById("addCartBtn").onclick = () => {
+        const quantity = parseInt(document.getElementById("quantity").value);
+        const requestBody = {
+            bookId: book.id,
+            userId: localStorage.getItem("userId"), //
+            quantity: quantity
+        };
+
+        fetch("/order-temp/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 1000) {
+                    alert("✅ Đã thêm vào giỏ hàng!");
+                    closeDetailModal();
+                } else {
+                    alert("❌ Thêm thất bại!");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+    };
+
+    modal.style.display = "flex";
 }
 
 function closeDetailModal() {
     document.getElementById("detailModal").style.display = "none";
 }
 
-// Tìm kiếm sách (client-side filter)
 function searchBooks() {
     const keyword = document.getElementById("searchInput").value.toLowerCase();
     const cards = document.querySelectorAll(".book-card");
@@ -54,3 +92,5 @@ function searchBooks() {
         card.style.display = title.includes(keyword) ? "block" : "none";
     });
 }
+
+modal.style.display = "flex";

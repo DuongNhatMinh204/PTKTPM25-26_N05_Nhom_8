@@ -20,7 +20,7 @@
     </div>
 </header>
 
-<!-- Nội dung -->
+<!-- Danh sách sách -->
 <main class="book-list" id="bookList">
     <!-- JS load sách -->
 </main>
@@ -30,27 +30,10 @@
     <div class="modal-content">
         <span class="close" onclick="closeDetailModal()">&times;</span>
         <div id="bookDetail" class="book-detail">
-            <!-- Dữ liệu load bằng JS -->
-            <div class="book-left">
-                <img src="/img/sample-book.jpg" alt="Book Image">
-                <h2>Tên Sách</h2>
-            </div>
-            <div class="book-right">
-                <p><strong>Tác giả:</strong> Tác giả A</p>
-                <p><strong>Thể loại:</strong> Tiểu thuyết</p>
-                <p><strong>NXB:</strong> Nhà xuất bản B</p>
-                <p><strong>Giá:</strong> <span class="price">120.000₫</span></p>
-
-                <div class="action">
-                    <label for="quantity">Số lượng:</label>
-                    <input type="number" id="quantity" value="1" min="1">
-                    <button class="add-cart">🛒 Thêm vào giỏ hàng</button>
-                </div>
-            </div>
+            <!-- Nội dung load bằng JS -->
         </div>
     </div>
 </div>
-
 
 <script src="/js/user_books.js"></script>
 </body>
