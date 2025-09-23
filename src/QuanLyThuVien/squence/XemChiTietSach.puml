@@ -1,0 +1,23 @@
+@startuml
+actor Customer
+participant "BookListPage" as BLP
+participant "BookController" as BC
+participant "BookService" as BS
+participant "BookRepository" as BR
+
+== Bắt đầu xem chi tiết ==
+Customer -> BLP: Chọn sách từ danh sách hoặc kết quả tìm kiếm
+Customer -> BLP: Nhấn "Xem chi tiết"
+BLP -> BC: Gửi yêu cầu xem chi tiết (bookId)
+
+== Xử lý và phản hồi ==
+BC -> BS: getBookDetails(bookId)
+BS -> BR: Tìm sách theo bookId
+BR --> BS: Trả về thông tin sách
+BS --> BC: Trả kết quả chi tiết sách
+BC --> BLP: Gửi dữ liệu chi tiết sách
+BLP --> Customer: Hiển thị thông tin (tên, tác giả, thể loại, năm XB, tóm tắt, trạng thái)
+
+== Kết thúc ==
+Customer -> BLP: Quyết định tiếp theo (đặt sách / thoát)
+@enduml

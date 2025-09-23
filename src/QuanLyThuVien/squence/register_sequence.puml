@@ -1,0 +1,41 @@
+@startuml
+actor Customer
+participant "RegistrationPage" as RP
+participant "UserController" as UC
+participant "UserService" as US
+participant "UserRepository" as UR
+
+== Bắt đầu đăng ký ==
+Customer -> RP: Chọn "Đăng ký tài khoản"
+RP -> Customer: Hiển thị form đăng ký
+
+Customer -> RP: Nhập họ tên, email, sđt, ngày sinh, mật khẩu
+Customer -> RP: Chọn giới tính
+RP -> UC: Gửi dữ liệu đăng ký (bao gồm giới tính)
+
+== Xử lý đăng ký ==
+UC -> US: validateRegistration(data)
+
+alt Dữ liệu không hợp lệ
+    US --> UC: Trả lỗi (email sai, sđt sai, mật khẩu yếu...)
+    UC --> RP: Hiển thị thông báo lỗi
+    RP --> Customer: Yêu cầu nhập lại
+else Dữ liệu hợp lệ
+    US -> UR: Kiểm tra email/sđt đã tồn tại?
+    alt Đã tồn tại
+        UR --> US: Đã tồn tại
+        US --> UC: Trả lỗi (Email/sđt đã dùng)
+        UC --> RP: Hiển thị lỗi
+        RP --> Customer: Yêu cầu nhập lại
+    else Chưa tồn tại
+        UR --> US: OK
+        US -> UR: Lưu người dùng mới (bao gồm giới tính)
+        UR --> US: Lưu thành công
+        US --> UC: Đăng ký thành công
+        UC --> RP: Hiển thị thông báo thành công
+        RP --> Customer: Đăng ký thành công
+    end
+end
+
+== Kết thúc ==
+@enduml

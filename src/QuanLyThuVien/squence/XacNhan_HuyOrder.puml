@@ -1,0 +1,30 @@
+@startuml
+title 3.6.13 - Xác nhận / Hủy đơn hàng
+
+actor Admin
+participant "OrderManagementPage" as OMP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+== Xác nhận đơn ==
+Admin -> OMP: Chọn đơn hàng → Nhấn "Xác nhận"
+OMP -> OC: xác nhận đơn (orderId)
+OC -> OS: confirmOrder(orderId)
+OS -> OR: updateStatus(orderId, "Đã xác nhận")
+OR --> OS: OK
+OS --> OC: Thành công
+OC --> OMP: Thông báo "Xác nhận thành công"
+
+== Hủy đơn ==
+Admin -> OMP: Chọn đơn → Nhấn "Hủy"
+OMP -> OMP: Hiển thị modal nhập lý do
+Admin -> OMP: Nhập lý do, nhấn "Xác nhận"
+OMP -> OC: hủy đơn (orderId, lý do)
+OC -> OS: cancelOrder(orderId, lý do)
+OS -> OR: updateStatus(orderId, "Đã hủy", lý do)
+OR --> OS: OK
+OS --> OC: Thành công
+OC --> OMP: Thông báo "Hủy thành công"
+
+@enduml

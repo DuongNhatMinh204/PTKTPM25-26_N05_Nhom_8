@@ -1,0 +1,38 @@
+@startuml
+title 3.6.10 - Xóa sách
+
+actor Admin
+participant "BookManagementPage" as BMP
+participant "BookController" as BC
+participant "BookService" as BS
+participant "BookRepository" as BR
+
+== Truy cập ==
+Admin -> BMP: Mở trang quản lý sách
+BMP -> BC: Yêu cầu danh sách sách
+BC -> BS: getAllBooks()
+BS -> BR: findAll()
+BR --> BS: Danh sách sách
+BS --> BC: Danh sách sách
+BC --> BMP: Hiển thị danh sách sách
+
+== Chọn và Xác nhận xóa ==
+Admin -> BMP: Chọn sách, nhấn "Xóa"
+BMP -> BMP: Hiển thị modal xác nhận
+Admin -> BMP: Xác nhận xóa
+BMP -> BC: Gửi yêu cầu xóa (bookId)
+
+== Xử lý xóa ==
+BC -> BS: deleteBook(bookId)
+BS -> BR: deleteById(bookId)
+alt Thành công
+    BR --> BS: OK
+    BS --> BC: Xóa thành công
+    BC --> BMP: Hiển thị thông báo "Xóa thành công"
+else Lỗi hệ thống
+    BR --> BS: Lỗi CSDL
+    BS --> BC: Xóa thất bại
+    BC --> BMP: Hiển thị lỗi "Không thể xóa"
+end
+
+@enduml

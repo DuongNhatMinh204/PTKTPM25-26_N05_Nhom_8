@@ -1,0 +1,39 @@
+@startuml
+actor Customer
+participant "BookListPage" as BLP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "BookRepository" as BR
+participant "OrderRepository" as OR
+participant "StaffSystem" as Staff
+
+== Bắt đầu mua sách ==
+Customer -> BLP: Chọn sách từ danh sách
+Customer -> BLP: Nhấn "Đặt mua" và nhập thông tin (địa chỉ, sđt, số lượng)
+BLP -> OC: Gửi yêu cầu đặt mua
+
+== Xử lý đặt mua ==
+OC -> OS: placeOrder(bookId, quantity, userInfo)
+OS -> BR: Kiểm tra số lượng sách còn lại
+
+alt Sách không đủ số lượng
+    BR --> OS: Không đủ sách
+    OS --> OC: Lỗi - sách không đủ
+    OC --> BLP: Hiển thị lỗi "Không đủ sách để đặt"
+    BLP --> Customer: Yêu cầu chọn lại số lượng
+else Sách đủ
+    BR --> OS: OK
+    OS -> OR: Tạo đơn hàng
+    OR --> OS: Lưu đơn thành công
+    OS -> BR: Cập nhật số lượng sách (giảm đi)
+    BR --> OS: Cập nhật xong
+    OS --> OC: Đặt hàng thành công
+    OC --> BLP: Hiển thị thông báo xác nhận
+    BLP --> Customer: Đặt hàng thành công
+
+    == (Tuỳ chọn) Xác nhận đơn ==
+    OC -> Staff: Thông báo đơn hàng mới
+end
+
+== Kết thúc ==
+@enduml

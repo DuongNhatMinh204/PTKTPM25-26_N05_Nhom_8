@@ -1,0 +1,33 @@
+@startuml
+actor Customer
+participant "OrderListPage" as OLP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+== Truy cập danh sách đơn ==
+Customer -> OLP: Mở danh sách đơn mua
+OLP -> Customer: Hiển thị danh sách đơn
+
+Customer -> OLP: Chọn đơn cần hủy, nhấn "Hủy đơn"
+OLP -> OC: Gửi yêu cầu hủy đơn (orderId)
+
+== Kiểm tra trạng thái đơn ==
+OC -> OS: cancelOrder(orderId)
+OS -> OR: Lấy thông tin đơn hàng
+OR --> OS: Trả thông tin đơn
+
+alt Đơn đã được xử lý/giao
+    OS --> OC: Trả lỗi - không thể hủy
+    OC --> OLP: Hiển thị thông báo "Đơn đã xử lý, không thể hủy"
+    OLP --> Customer: Yêu cầu liên hệ hỗ trợ
+else Đơn hợp lệ để hủy
+    OS -> OR: Cập nhật trạng thái = "Đã hủy"
+    OR --> OS: Cập nhật thành công
+    OS --> OC: Hủy thành công
+    OC --> OLP: Thông báo hủy thành công
+    OLP --> Customer: Đơn đã được hủy
+end
+
+== Kết thúc ==
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+actor Customer
+participant "LoginPage" as LP
+participant "AuthController" as AC
+participant "AuthService" as AS
+participant "UserRepository" as UR
+
+== Bắt đầu đăng nhập ==
+Customer -> LP: Chọn "Đăng nhập"
+LP -> Customer: Hiển thị form đăng nhập
+
+Customer -> LP: Nhập email/sđt + mật khẩu
+LP -> AC: Gửi thông tin đăng nhập
+
+== Xử lý xác thực ==
+AC -> AS: authenticate(email/sđt, password)
+AS -> UR: Tìm người dùng theo email/sđt
+UR --> AS: Thông tin người dùng
+
+alt Tài khoản không tồn tại
+    AS --> AC: Lỗi - sai thông tin đăng nhập
+    AC --> LP: Hiển thị lỗi "Thông tin không đúng"
+    LP --> Customer: Yêu cầu nhập lại
+else Người dùng tồn tại
+    alt Tài khoản bị khóa
+        AS --> AC: Lỗi - tài khoản bị khóa
+        AC --> LP: Hiển thị lỗi "Tài khoản bị khóa"
+        LP --> Customer: Yêu cầu liên hệ quản trị viên
+    else Tài khoản hợp lệ
+        AS --> AC: Xác thực thành công
+        AC --> LP: Gửi token hoặc thông báo thành công
+        LP --> Customer: Chuyển đến trang chính / Dashboard
+    end
+end
+
+== Kết thúc ==
+@enduml

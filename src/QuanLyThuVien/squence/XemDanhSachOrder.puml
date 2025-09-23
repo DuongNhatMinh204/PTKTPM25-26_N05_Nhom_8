@@ -1,0 +1,26 @@
+@startuml
+actor Customer
+participant "OrderListPage" as OLP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+== Truy cập danh sách ==
+Customer -> OLP: Mở mục "Danh sách đơn mượn"
+OLP -> OC: Gửi yêu cầu lấy danh sách đơn (userId)
+
+== Xử lý truy vấn ==
+OC -> OS: getUserOrders(userId)
+OS -> OR: Tìm đơn hàng theo userId
+OR --> OS: Trả danh sách đơn (hoặc rỗng)
+OS --> OC: Danh sách đơn
+OC --> OLP: Trả kết quả cho giao diện
+
+alt Có đơn hàng
+    OLP --> Customer: Hiển thị danh sách (mã đơn, tên sách, ngày mượn, trạng thái)
+else Không có đơn nào
+    OLP --> Customer: Hiển thị thông báo "Không có đơn mượn nào"
+end
+
+== Kết thúc ==
+@enduml

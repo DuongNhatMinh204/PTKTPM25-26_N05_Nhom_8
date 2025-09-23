@@ -1,0 +1,33 @@
+@startuml
+title 3.6.19 - Xác nhận vận chuyển đơn hàng
+
+actor Storekeeper
+participant "OrderManagementPage" as OMP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+Storekeeper -> OMP: Truy cập quản lý đơn hàng
+OMP -> OC: Lấy danh sách đơn đã xác nhận
+OC -> OS: getConfirmedOrders()
+OS -> OR: findByStatus("Đã xác nhận")
+OR --> OS: Danh sách
+OS --> OC: OK
+OC --> OMP: Hiển thị danh sách
+
+Storekeeper -> OMP: Nhấn "Xác nhận vận chuyển"
+OMP -> OC: confirmShipping(orderId)
+OC -> OS: confirmShipping(orderId)
+OS -> OR: updateStatus(orderId, "Đang vận chuyển")
+
+alt Thành công
+    OR --> OS: OK
+    OS --> OC: Thành công
+    OC --> OMP: Thông báo "Xác nhận thành công"
+else Lỗi xác nhận
+    OR --> OS: Lỗi
+    OS --> OC: Báo lỗi
+    OC --> OMP: Hiển thị lỗi
+end
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+actor Customer
+participant "SearchPage" as SP
+participant "BookController" as BC
+participant "BookService" as BS
+participant "BookRepository" as BR
+
+== Bắt đầu tìm kiếm ==
+Customer -> SP: Chọn "Tìm kiếm sách"
+SP -> Customer: Hiển thị ô nhập từ khóa
+
+Customer -> SP: Nhập từ khóa (tên sách, tác giả, thể loại)
+SP -> BC: Gửi yêu cầu tìm kiếm (từ khóa)
+
+== Xử lý tìm kiếm ==
+BC -> BS: searchBooks(keyword)
+BS -> BR: findBooksByKeyword(keyword)
+BR --> BS: Danh sách sách (hoặc rỗng)
+BS --> BC: Trả kết quả tìm kiếm
+BC --> SP: Gửi danh sách sách phù hợp
+
+alt Có kết quả
+    SP --> Customer: Hiển thị danh sách sách
+else Không tìm thấy
+    SP --> Customer: Thông báo "Không tìm thấy sách phù hợp"
+end
+
+== Kết thúc ==
+@enduml

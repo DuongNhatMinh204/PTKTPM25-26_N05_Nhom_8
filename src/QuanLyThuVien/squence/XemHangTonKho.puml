@@ -1,0 +1,24 @@
+@startuml
+title 3.6.16 - Xem danh sách hàng tồn (Thủ kho)
+
+actor Storekeeper
+participant "StockPage" as SP
+participant "StockController" as SC
+participant "StockService" as SS
+participant "StockRepository" as SR
+
+Storekeeper -> SP: Mở “Quản lý hàng tồn”
+SP -> SC: Lấy danh sách sách tồn kho
+SC -> SS: getStockItems()
+SS -> SR: findAll()
+alt Có sách
+    SR --> SS: Danh sách sách tồn
+    SS --> SC: Trả danh sách
+    SC --> SP: Hiển thị danh sách tồn kho
+else Không có sách
+    SR --> SS: []
+    SS --> SC: Danh sách rỗng
+    SC --> SP: Hiển thị "Không có hàng tồn"
+end
+
+@enduml

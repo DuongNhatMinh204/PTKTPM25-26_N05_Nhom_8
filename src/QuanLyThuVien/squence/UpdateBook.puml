@@ -1,0 +1,44 @@
+@startuml
+title 3.6.11 - Cập nhật sách
+
+actor Admin
+participant "BookManagementPage" as BMP
+participant "BookController" as BC
+participant "BookService" as BS
+participant "BookRepository" as BR
+
+== Mở danh sách ==
+Admin -> BMP: Truy cập trang quản lý sách
+BMP -> BC: Lấy danh sách sách
+BC -> BS: getAllBooks()
+BS -> BR: findAll()
+BR --> BS: Danh sách
+BS --> BC: Danh sách
+BC --> BMP: Hiển thị danh sách
+
+== Cập nhật ==
+Admin -> BMP: Chọn sách, nhấn "Cập nhật"
+BMP -> BMP: Hiển thị modal cập nhật
+Admin -> BMP: Nhập thông tin mới, nhấn "Lưu"
+BMP -> BC: Gửi thông tin cập nhật
+
+== Xử lý cập nhật ==
+BC -> BS: updateBook(bookData)
+BS -> BS: validate(bookData)
+alt Dữ liệu không hợp lệ
+    BS --> BC: Báo lỗi
+    BC --> BMP: Hiển thị lỗi
+else Dữ liệu hợp lệ
+    BS -> BR: save(bookData)
+    alt Lưu thành công
+        BR --> BS: OK
+        BS --> BC: Thành công
+        BC --> BMP: Hiển thị thông báo thành công
+    else Lỗi DB
+        BR --> BS: Lỗi
+        BS --> BC: Báo lỗi
+        BC --> BMP: Hiển thị lỗi
+    end
+end
+
+@enduml

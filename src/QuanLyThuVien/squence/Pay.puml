@@ -1,0 +1,41 @@
+@startuml
+actor Customer
+participant "PaymentPage" as PP
+participant "PaymentController" as PC
+participant "PaymentService" as PS
+participant "PaymentGateway" as PG
+participant "OrderRepository" as OR
+
+== Bắt đầu thanh toán ==
+Customer -> PP: Truy cập mục "Thanh toán"
+PP -> Customer: Hiển thị các khoản phí cần thanh toán
+
+Customer -> PP: Chọn phương thức thanh toán (thẻ / QR)
+Customer -> PP: Nhập thông tin thanh toán, nhấn "Xác nhận"
+PP -> PC: Gửi yêu cầu thanh toán (orderId, paymentInfo)
+
+== Xử lý giao dịch ==
+PC -> PS: processPayment(orderId, paymentInfo)
+PS -> PG: Gửi yêu cầu xử lý giao dịch
+
+alt Thông tin không hợp lệ
+    PG --> PS: Lỗi - thông tin thanh toán không hợp lệ
+    PS --> PC: Trả lỗi "Thông tin không hợp lệ"
+    PC --> PP: Hiển thị lỗi, yêu cầu nhập lại
+    PP --> Customer: Nhập lại thông tin thanh toán
+else Lỗi giao dịch (kết nối ngân hàng, v.v.)
+    PG --> PS: Giao dịch thất bại
+    PS --> PC: Thất bại - thử lại
+    PC --> PP: Thông báo lỗi, đề xuất chọn phương thức khác
+    PP --> Customer: Thử lại hoặc chọn phương thức khác
+else Giao dịch thành công
+    PG --> PS: Thanh toán thành công
+    PS -> OR: Cập nhật trạng thái đơn = "Đã thanh toán"
+    OR --> PS: OK
+    PS --> PC: Xử lý hoàn tất
+    PC --> PP: Thông báo thanh toán thành công
+    PP --> Customer: Thanh toán thành công
+end
+
+== Kết thúc ==
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+title 3.6.17 - Cập nhật số lượng sách (Thủ kho)
+
+actor Storekeeper
+participant "StockPage" as SP
+participant "StockController" as SC
+participant "StockService" as SS
+participant "StockRepository" as SR
+
+Storekeeper -> SP: Truy cập “Quản lý hàng tồn”
+SP -> SC: Lấy danh sách sách
+SC -> SS: getStockItems()
+SS -> SR: findAll()
+SR --> SS: Danh sách
+SS --> SC: OK
+SC --> SP: Hiển thị danh sách
+
+Storekeeper -> SP: Chọn sách → Nhập số lượng mới
+SP -> SC: updateStock(bookId, newQty)
+SC -> SS: updateQuantity(bookId, newQty)
+SS -> SS: validate(newQty)
+alt Hợp lệ
+    SS -> SR: updateQuantity(bookId, newQty)
+    SR --> SS: OK
+    SS --> SC: Thành công
+    SC --> SP: Thông báo "Cập nhật thành công"
+else Không hợp lệ
+    SS --> SC: Báo lỗi
+    SC --> SP: Hiển thị lỗi
+end
+
+@enduml

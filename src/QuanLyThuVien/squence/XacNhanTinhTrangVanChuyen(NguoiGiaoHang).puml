@@ -1,0 +1,39 @@
+@startuml
+title 3.6.20 - Xác nhận tình trạng vận chuyển đơn hàng
+
+actor Shipper
+participant "DeliveryPage" as DP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+== Lấy danh sách đơn hàng ==
+Shipper -> DP: Đăng nhập
+DP -> OC: Lấy danh sách đơn được phân công
+OC -> OS: getOrdersByShipper(shipperId)
+OS -> OR: findByShipperId(shipperId)
+OR --> OS: Danh sách đơn
+OS --> OC: OK
+OC --> DP: Hiển thị danh sách đơn
+
+== Giao thành công ==
+Shipper -> DP: Chọn đơn, nhấn "Giao thành công"
+DP -> OC: updateDeliveryStatus(orderId, "Đã giao")
+OC -> OS: updateDeliveryStatus(orderId, "Đã giao")
+OS -> OR: updateStatus(orderId, "Đã giao")
+OR --> OS: OK
+OS --> OC: OK
+OC --> DP: Thông báo "Giao thành công"
+
+== Giao thất bại ==
+Shipper -> DP: Chọn đơn, nhấn "Giao thất bại"
+DP -> DP: Hiển thị modal nhập lý do
+Shipper -> DP: Nhập lý do và xác nhận
+DP -> OC: updateDeliveryStatus(orderId, "Giao thất bại", lý do)
+OC -> OS: updateDeliveryStatus(orderId, "Giao thất bại", lý do)
+OS -> OR: updateStatusWithReason(orderId, "Giao thất bại", lý do)
+OR --> OS: OK
+OS --> OC: OK
+OC --> DP: Thông báo "Cập nhật trạng thái thành công"
+
+@enduml

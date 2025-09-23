@@ -1,0 +1,25 @@
+@startuml
+title 3.6.18 - Xem danh sách đơn hàng đã được xác nhận
+
+actor Storekeeper
+participant "OrderManagementPage" as OMP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+Storekeeper -> OMP: Truy cập chức năng quản lý đơn hàng
+OMP -> OC: yêu cầu danh sách đơn đã được xác nhận
+OC -> OS: getConfirmedOrders()
+OS -> OR: findByStatus("Đã xác nhận")
+
+alt Có đơn hàng
+    OR --> OS: Danh sách đơn hàng
+    OS --> OC: Danh sách đơn hàng
+    OC --> OMP: Hiển thị danh sách
+else Không có đơn hàng
+    OR --> OS: []
+    OS --> OC: Danh sách rỗng
+    OC --> OMP: Hiển thị thông báo "Hiện chưa có đơn hàng nào được xác nhận."
+end
+
+@enduml

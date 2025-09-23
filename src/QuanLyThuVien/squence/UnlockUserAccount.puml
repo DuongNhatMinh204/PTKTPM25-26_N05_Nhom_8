@@ -1,0 +1,24 @@
+@startuml
+title 3.6.15 - Mở khóa tài khoản
+
+actor Admin
+participant "UserManagementPage" as UMP
+participant "UserController" as UC
+participant "UserService" as US
+participant "UserRepository" as UR
+
+Admin -> UMP: Chọn tài khoản, nhấn "Mở khóa"
+UMP -> UC: unlockUser(userId)
+UC -> US: unlockUser(userId)
+US -> UR: updateStatus(userId, "Hoạt động")
+alt Thành công
+    UR --> US: OK
+    US --> UC: Thành công
+    UC --> UMP: Thông báo "Mở khóa thành công"
+else Lỗi
+    UR --> US: Lỗi
+    US --> UC: Báo lỗi
+    UC --> UMP: Hiển thị lỗi
+end
+
+@enduml

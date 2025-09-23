@@ -1,0 +1,33 @@
+@startuml
+actor Admin
+participant "BookManagementPage" as BMP
+participant "BookController" as BC
+participant "BookService" as BS
+participant "BookRepository" as BR
+
+== Bắt đầu thêm sách ==
+Admin -> BMP: Chọn "Thêm sách"
+BMP -> Admin: Hiển thị giao diện thêm sách
+
+Admin -> BMP: Nhập thông tin (tên, loại, giá, chi tiết)
+Admin -> BMP: Nhấn nút "Xác nhận thêm"
+BMP -> BC: Gửi yêu cầu thêm sách (bookData)
+
+== Xử lý thêm sách ==
+BC -> BS: addNewBook(bookData)
+BS -> BS: validate(bookData)
+
+alt Dữ liệu không hợp lệ
+    BS --> BC: Lỗi validate
+    BC --> BMP: Hiển thị lỗi, yêu cầu nhập lại
+    BMP --> Admin: Nhập lại thông tin
+else Dữ liệu hợp lệ
+    BS -> BR: Lưu sách vào cơ sở dữ liệu
+    BR --> BS: Lưu thành công
+    BS --> BC: Thêm sách thành công
+    BC --> BMP: Hiển thị thông báo thành công
+    BMP --> Admin: Sách đã được thêm
+end
+
+== Kết thúc ==
+@enduml

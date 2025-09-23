@@ -1,0 +1,24 @@
+@startuml
+title 3.6.14 - Khóa tài khoản người dùng
+
+actor Admin
+participant "UserManagementPage" as UMP
+participant "UserController" as UC
+participant "UserService" as US
+participant "UserRepository" as UR
+
+Admin -> UMP: Chọn tài khoản, nhấn "Khóa"
+UMP -> UC: lockUser(userId)
+UC -> US: lockUser(userId)
+US -> UR: updateStatus(userId, "Đã khóa")
+alt Thành công
+    UR --> US: OK
+    US --> UC: Thành công
+    UC --> UMP: Thông báo "Khóa thành công"
+else Lỗi
+    UR --> US: Lỗi
+    US --> UC: Báo lỗi
+    UC --> UMP: Hiển thị lỗi
+end
+
+@enduml

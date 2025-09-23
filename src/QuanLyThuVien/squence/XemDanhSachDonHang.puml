@@ -1,0 +1,18 @@
+@startuml
+title 3.6.12 - Xem danh sách đơn hàng (Admin)
+
+actor Admin
+participant "OrderManagementPage" as OMP
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "OrderRepository" as OR
+
+Admin -> OMP: Truy cập trang quản lý đơn
+OMP -> OC: Yêu cầu danh sách đơn hàng
+OC -> OS: getAllOrders()
+OS -> OR: findAll()
+OR --> OS: Danh sách đơn
+OS --> OC: Danh sách đơn
+OC --> OMP: Hiển thị danh sách đơn
+
+@enduml
