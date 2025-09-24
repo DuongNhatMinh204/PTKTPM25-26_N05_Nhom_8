@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class BookOrderTempDetailDTO {
+    private String id;
+
     private String book_id;
 
     private String bookUrl;

@@ -2,6 +2,14 @@ const apiUrl = "/book/get-all?page=1&size=10";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadBooks();
+
+    // Gắn sự kiện cho icon giỏ hàng trên header
+    const cartIcon = document.querySelector(".icons .icon:first-child");
+    if (cartIcon) {
+        cartIcon.onclick = () => {
+            window.location.href = "/cart";
+        };
+    }
 });
 
 function loadBooks() {
@@ -92,5 +100,3 @@ function searchBooks() {
         card.style.display = title.includes(keyword) ? "block" : "none";
     });
 }
-
-modal.style.display = "flex";

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ Hàng</title>
+    <link rel="stylesheet" href="/css/cart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="logo">📚 Hiệu Sách Trực Tuyến</div>
+    <div class="icons">
+        <span onclick="window.location.href='/user'" class="icon">🏠</span>
+    </div>
+</header>
+
+<main class="cart-wrapper">
+    <!-- Danh sách sản phẩm -->
+    <section class="cart-container">
+        <h2>🛒 Giỏ Hàng Của Bạn</h2>
+        <table id="cartTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll"></th>
+                <th>Ảnh</th>
+                <th>Tên Sách</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+                <th>Tổng</th>
+                <th>Xóa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- JS sẽ load sản phẩm -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Thanh toán -->
+    <aside class="checkout-container">
+        <h3>Thông Tin Thanh Toán</h3>
+        <label>Địa chỉ giao hàng</label>
+        <textarea id="address" placeholder="Nhập địa chỉ của bạn"></textarea>
+
+        <label>Phương thức thanh toán</label>
+        <select id="paymentType">
+            <option value="COD">COD (Thanh toán khi nhận hàng)</option>
+            <option value="ONLINE">ONLINE (Chuyển khoản)</option>
+        </select>
+
+        <h3 id="grandTotal">Tổng cộng: 0 ₫</h3>
+        <button class="checkout-btn" onclick="checkout()">Thanh Toán</button>
+    </aside>
+</main>
+
+<script src="/js/cart.js"></script>
+</body>
+</html>

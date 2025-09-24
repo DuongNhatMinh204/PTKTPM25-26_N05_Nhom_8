@@ -44,9 +44,11 @@ public class BookOrderTempServiceImpl implements BookOrderTempService {
         List<BookOrderTemp> bookOrderTempList = bookOrderTempRepository.findByUserId(userId);
         List<BookOrderTempDetailDTO> bookOrderTempDetailDTOList = new ArrayList<>();
         for (BookOrderTemp bookOrderTemp : bookOrderTempList) {
+            if(!bookOrderTemp.isStatus()) continue;
             Book book = bookRepository.findById(bookOrderTemp.getBookId()).get();
             BookOrderTempDetailDTO bookOrderTempDetailDTO = new BookOrderTempDetailDTO();
 
+            bookOrderTempDetailDTO.setId(bookOrderTemp.getId());
             bookOrderTempDetailDTO.setBook_id(book.getId());
             bookOrderTempDetailDTO.setBookQuantity(bookOrderTemp.getQuantity());
             bookOrderTempDetailDTO.setBookPrice(book.getPrice());
