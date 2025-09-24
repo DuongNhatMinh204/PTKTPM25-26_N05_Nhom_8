@@ -30,5 +30,11 @@ public class WebController {
         return "shipper";
     }
     @GetMapping("/admin_orders")
-    public String adminorders(){return "admin_orders";}
+    public String adminorders(){
+        return "admin_orders";
+    }
+    @GetMapping("/cart")
+    public String cart(){
+        return "cart";
+    }
 }
