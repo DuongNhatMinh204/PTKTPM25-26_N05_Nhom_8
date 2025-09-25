@@ -1,9 +1,6 @@
 package com.nminh.quanlythuvien.service.impl;
 
-import com.nminh.quanlythuvien.entity.Book;
-import com.nminh.quanlythuvien.entity.BookOrder;
-import com.nminh.quanlythuvien.entity.OrderDetail;
-import com.nminh.quanlythuvien.entity.Shipping;
+import com.nminh.quanlythuvien.entity.*;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.enums.OrderStatus;
 import com.nminh.quanlythuvien.exception.AppException;
@@ -12,10 +9,7 @@ import com.nminh.quanlythuvien.model.request.BookOrderCreateRequest;
 import com.nminh.quanlythuvien.model.request.OrderItemRequest;
 import com.nminh.quanlythuvien.model.response.BookOrderDetailResponse;
 import com.nminh.quanlythuvien.model.response.BookOrderResponse;
-import com.nminh.quanlythuvien.repository.BookOrderRepository;
-import com.nminh.quanlythuvien.repository.BookRepository;
-import com.nminh.quanlythuvien.repository.OrderDetailRepository;
-import com.nminh.quanlythuvien.repository.UserRepository;
+import com.nminh.quanlythuvien.repository.*;
 import com.nminh.quanlythuvien.service.BookOrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookOrderServiceImpl implements BookOrderService {
@@ -42,6 +37,9 @@ public class BookOrderServiceImpl implements BookOrderService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private BookOrderTempRepository bookOrderTempRepository;
 
     public List<BookOrder> getApprovedOrders() {
         return bookOrderRepository.findByOrderStatus(OrderStatus.APPROVED);
@@ -97,6 +95,11 @@ public class BookOrderServiceImpl implements BookOrderService {
         for(OrderItemRequest item : request.getOrderItems()) {
             Book book = bookRepository.findById(item.getBookId())
                     .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+
+            BookOrderTemp orderTemp = bookOrderTempRepository.findById(item.getOrderTempId()).orElse(null);
+            orderTemp.setStatus(false);
+            bookOrderTempRepository.save(orderTemp);
+
             if(book.getQuantity() < item.getQuantity()) {
                 throw new AppException(ErrorCode.NOT_ENOUGH_STOCK);
             }

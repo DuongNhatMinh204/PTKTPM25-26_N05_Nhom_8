@@ -10,4 +10,5 @@ import lombok.*;
 public class OrderItemRequest {
     private String bookId;
     private Integer quantity;
+    private String orderTempId;
 }

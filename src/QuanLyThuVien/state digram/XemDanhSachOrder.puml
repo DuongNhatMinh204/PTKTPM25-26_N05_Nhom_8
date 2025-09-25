@@ -1,17 +1,22 @@
 @startuml
-title State Diagram – Xem danh sách đơn mượn sách
+title State Diagram – 3.6.8 Xem danh sách đơn hàng (Khách hàng)
 
-[*] --> TruyCapDanhSachDon
+[*] --> DaDangNhap : Người dùng đã đăng nhập hệ thống
 
-TruyCapDanhSachDon --> HienThiDanhSach : Hệ thống hiển thị danh sách đơn mượn
+DaDangNhap --> TruyCapDanhSachDonHang : Truy cập mục "Danh sách đơn mua"
 
-HienThiDanhSach --> ThucHienHanhDong : Người dùng chọn đơn để xem chi tiết, hủy hoặc thanh toán
-HienThiDanhSach --> KetThucXemDanhSach : Người dùng không thực hiện hành động gì, thoát
+TruyCapDanhSachDonHang --> HienThiDanhSachDon : Hệ thống truy vấn và hiển thị danh sách đơn hàng
 
-ThucHienHanhDong --> [*]
-KetThucXemDanhSach --> [*]
+state HienThiDanhSachDon {
+  [*] --> CoDonHang : Có đơn hàng
+  [*] --> KhongCoDonHang : Không có đơn hàng
+}
 
-TruyCapDanhSachDon --> KhongCoDon : Không có đơn mượn nào trong lịch sử
-KhongCoDon --> [*]
+CoDonHang --> XuLyTiepTheo : Xem chi tiết / Hủy đơn / Thanh toán
+
+XuLyTiepTheo --> [*]
+
+KhongCoDonHang --> BaoLoiKhongCoDon : Thông báo: "Không có đơn mua nào trong lịch sử"
+BaoLoiKhongCoDon --> [*]
 
 @enduml

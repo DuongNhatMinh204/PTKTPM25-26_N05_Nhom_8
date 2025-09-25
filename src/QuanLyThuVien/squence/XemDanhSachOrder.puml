@@ -1,26 +1,29 @@
 @startuml
+title 3.6.8 - Xem danh sách đơn mua sách (Khách hàng)
+
 actor Customer
 participant "OrderListPage" as OLP
 participant "OrderController" as OC
 participant "OrderService" as OS
 participant "OrderRepository" as OR
 
-== Truy cập danh sách ==
-Customer -> OLP: Mở mục "Danh sách đơn mượn"
-OLP -> OC: Gửi yêu cầu lấy danh sách đơn (userId)
-
-== Xử lý truy vấn ==
-OC -> OS: getUserOrders(userId)
-OS -> OR: Tìm đơn hàng theo userId
-OR --> OS: Trả danh sách đơn (hoặc rỗng)
-OS --> OC: Danh sách đơn
-OC --> OLP: Trả kết quả cho giao diện
+== Truy cập danh sách đơn ==
+Customer -> OLP: Truy cập "Danh sách đơn mua"
+OLP -> OC: yêu cầu lấy danh sách đơn của khách
+OC -> OS: getOrdersByCustomer(customerId)
+OS -> OR: findByCustomerId(customerId)
 
 alt Có đơn hàng
-    OLP --> Customer: Hiển thị danh sách (mã đơn, tên sách, ngày mượn, trạng thái)
-else Không có đơn nào
-    OLP --> Customer: Hiển thị thông báo "Không có đơn mượn nào"
+    OR --> OS: Danh sách đơn mua
+    OS --> OC: Danh sách đơn mua
+    OC --> OLP: Hiển thị danh sách đơn (mã, tên sách, ngày mua, trạng thái)
+    Customer -> OLP: Xem chi tiết / Hủy đơn / Thanh toán
+else Không có đơn hàng
+    OR --> OS: []
+    OS --> OC: Danh sách rỗng
+    OC --> OLP: Hiển thị thông báo "Không có đơn mua nào trong lịch sử"
 end
 
-== Kết thúc ==
+Customer -> OLP: Kết thúc quy trình
+
 @enduml

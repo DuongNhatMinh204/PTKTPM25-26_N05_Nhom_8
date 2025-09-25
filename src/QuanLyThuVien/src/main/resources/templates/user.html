@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Hiệu Sách Online</title>
+    <link rel="stylesheet" href="/css/user_books.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Trang cua USER</h1>
+<!-- Header -->
+<header class="header">
+    <div class="logo">📚 Hiệu Sách Trực Tuyến</div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm sách...">
+        <button onclick="searchBooks()">🔍</button>
+    </div>
+    <div class="icons">
+        <span class="icon">🛒</span>
+        <span class="icon">👤</span>
+    </div>
+</header>
+
+<!-- Danh sách sách -->
+<main class="book-list" id="bookList">
+    <!-- JS load sách -->
+</main>
+
+<!-- Modal chi tiết sách -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDetailModal()">&times;</span>
+        <div id="bookDetail" class="book-detail">
+            <!-- Nội dung load bằng JS -->
+        </div>
+    </div>
+</div>
+
+<script src="/js/user_books.js"></script>
 </body>
 </html>
