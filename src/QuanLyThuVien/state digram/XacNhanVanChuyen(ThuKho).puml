@@ -1,0 +1,24 @@
+@startuml
+title State Diagram – 3.6.19 Xác nhận vận chuyển đơn hàng (Thủ kho)
+
+[*] --> TruyCapTrangQuanLyDon : Thủ kho mở trang quản lý đơn hàng
+
+TruyCapTrangQuanLyDon --> GuiYeuCauDonXacNhan : Gửi yêu cầu lấy danh sách đơn "Đã xác nhận"
+GuiYeuCauDonXacNhan --> HienThiDanhSachDon : Hiển thị danh sách đơn đã xác nhận
+
+HienThiDanhSachDon --> NhanXacNhanVanChuyen : Thủ kho nhấn nút "Xác nhận vận chuyển"
+
+NhanXacNhanVanChuyen --> CapNhatTrangThai : Hệ thống cập nhật trạng thái đơn sang "Đang vận chuyển"
+
+state CapNhatTrangThai {
+  [*] --> ThanhCong : Nếu cập nhật trạng thái thành công
+  [*] --> LoiCapNhat : Nếu lỗi khi cập nhật
+}
+
+ThanhCong --> HienThiThongBaoThanhCong : Thông báo "Xác nhận thành công"
+LoiCapNhat --> HienThiThongBaoLoi : Hiển thị lỗi xác nhận
+
+HienThiThongBaoThanhCong --> [*]
+HienThiThongBaoLoi --> [*]
+
+@enduml

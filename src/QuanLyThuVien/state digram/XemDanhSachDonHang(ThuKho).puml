@@ -1,0 +1,21 @@
+@startuml
+title State Diagram – 3.6.18 Xem danh sách đơn hàng đã xác nhận (Thủ kho)
+
+[*] --> TruyCapQuanLyDonHang : Thủ kho truy cập chức năng "Quản lý đơn hàng"
+
+TruyCapQuanLyDonHang --> GuiYeuCauDonXacNhan : Gửi yêu cầu lấy danh sách đơn đã xác nhận
+
+GuiYeuCauDonXacNhan --> DangTaiDuLieu : Hệ thống truy vấn CSDL theo trạng thái "Đã xác nhận"
+
+state DangTaiDuLieu {
+  [*] --> CoDonHang : Nếu có đơn hàng đã xác nhận
+  [*] --> KhongCoDonHang : Nếu không có đơn hàng
+}
+
+CoDonHang --> HienThiDanhSachDon : Hiển thị danh sách đơn hàng
+KhongCoDonHang --> HienThiThongBaoRong : Hiển thị "Hiện chưa có đơn hàng nào được xác nhận"
+
+HienThiDanhSachDon --> [*]
+HienThiThongBaoRong --> [*]
+
+@enduml

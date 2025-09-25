@@ -1,0 +1,21 @@
+@startuml
+title State Diagram – Đăng ký tài khoản thư viện
+
+[*] --> ChờĐăngKý
+
+ChờĐăngKý --> NhậpThôngTin : Chọn "Đăng ký tài khoản"
+
+NhậpThôngTin --> KiểmTraDữLiệu : Nhập họ tên, email, SĐT, ngày sinh, mật khẩu
+
+KiểmTraDữLiệu --> ĐăngKýThànhCông : Dữ liệu hợp lệ
+KiểmTraDữLiệu --> BáoLỗi : Dữ liệu không hợp lệ (email sai, mật khẩu ngắn, v.v.)
+KiểmTraDữLiệu --> TrùngThôngTin : Email hoặc SĐT đã tồn tại
+
+BáoLỗi --> NhậpLạiThôngTin : Người dùng sửa và nhập lại
+TrùngThôngTin --> NhậpLạiThôngTin
+
+NhậpLạiThôngTin --> KiểmTraDữLiệu
+
+ĐăngKýThànhCông --> [*]
+
+@enduml

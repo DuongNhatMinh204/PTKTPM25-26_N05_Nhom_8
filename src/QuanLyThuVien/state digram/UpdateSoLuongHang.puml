@@ -1,0 +1,24 @@
+@startuml
+title State Diagram – 3.6.17 Cập nhật số lượng sách (Thủ kho)
+
+[*] --> TruyCapQuanLyHangTon : Truy cập "Quản lý hàng tồn"
+
+TruyCapQuanLyHangTon --> HienThiDanhSachSach : Hệ thống hiển thị danh sách sách tồn kho
+
+HienThiDanhSachSach --> NhapSoLuongMoi : Chọn sách và nhập số lượng mới
+
+NhapSoLuongMoi --> KiemTraSoLuong : Hệ thống kiểm tra tính hợp lệ của số lượng
+
+state KiemTraSoLuong {
+  [*] --> HopLe : Nếu số lượng hợp lệ
+  [*] --> KhongHopLe : Nếu số lượng không hợp lệ
+}
+
+HopLe --> CapNhatSoLuong : Cập nhật số lượng sách trong cơ sở dữ liệu
+CapNhatSoLuong --> HienThiThongBaoThanhCong : Thông báo "Cập nhật thành công"
+HienThiThongBaoThanhCong --> [*]
+
+KhongHopLe --> HienThiThongBaoLoi : Thông báo lỗi (ví dụ: số âm, định dạng sai)
+HienThiThongBaoLoi --> [*]
+
+@enduml

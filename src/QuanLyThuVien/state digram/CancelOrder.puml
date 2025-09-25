@@ -1,0 +1,21 @@
+@startuml
+title State Diagram – Hủy đơn đặt sách
+
+[*] --> TruyCapDanhSachDon
+
+TruyCapDanhSachDon --> ChonDonDeHuy : Người dùng chọn đơn và nhấn "Hủy đơn"
+
+ChonDonDeHuy --> KiemTraTinhTrangDon : Hệ thống kiểm tra trạng thái đơn
+
+KiemTraTinhTrangDon --> DonHuyDuoc : Đơn chưa xử lý → hợp lệ để hủy
+KiemTraTinhTrangDon --> DonDaXuLy : Đơn đã được xử lý → không thể hủy
+
+DonHuyDuoc --> CapNhatTrangThaiDon : Cập nhật trạng thái thành "Đã hủy"
+CapNhatTrangThaiDon --> ThongBaoThanhCong : Thông báo cho người dùng
+
+ThongBaoThanhCong --> [*]
+
+DonDaXuLy --> ThongBaoLoi : Thông báo đơn không thể hủy
+ThongBaoLoi --> [*]
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+title State Diagram – Đặt mua sách từ thư viện
+
+[*] --> ChờChọnSách
+
+ChờChọnSách --> NhậpThôngTinMua : Chọn sách và nhấn "Đặt mua"
+
+NhậpThôngTinMua --> KiểmTraĐơnHàng : Nhập địa chỉ, SĐT, số lượng
+
+KiểmTraĐơnHàng --> ĐơnHợpLệ : Sách còn sẵn và người dùng đủ điều kiện
+KiểmTraĐơnHàng --> VượtQuáGiớiHạn : Vượt số lượng sách hiện có
+
+VượtQuáGiớiHạn --> NhậpLạiThôngTin : Thông báo lỗi → người dùng sửa lại
+NhậpLạiThôngTin --> KiểmTraĐơnHàng
+
+ĐơnHợpLệ --> LưuĐơnVàThôngBáo : Hệ thống lưu đơn và gửi xác nhận
+LưuĐơnVàThôngBáo --> ĐặtHàngThànhCông
+
+ĐặtHàngThànhCông --> [*]
+
+@enduml

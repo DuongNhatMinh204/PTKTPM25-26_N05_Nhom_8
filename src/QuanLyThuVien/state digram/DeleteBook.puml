@@ -1,0 +1,29 @@
+@startuml
+title State Diagram – 3.6.10 Xóa sách (Admin)
+
+[*] --> TruyCapQuanLySach : Truy cập trang quản lý sách
+
+TruyCapQuanLySach --> HienThiDanhSach : Hiển thị danh sách sách
+
+HienThiDanhSach --> ChonSachXoa : Chọn sách cần xóa
+
+ChonSachXoa --> HienThiModalXacNhan : Hiển thị modal xác nhận
+
+HienThiModalXacNhan --> XacNhanXoa : Nhấn xác nhận xóa
+
+XacNhanXoa --> GuiYeuCauXoa : Gửi yêu cầu xóa đến hệ thống
+
+GuiYeuCauXoa --> XuLyXoa : Hệ thống tiến hành xóa sách
+
+state XuLyXoa {
+  [*] --> XoaThanhCong : Nếu xóa thành công
+  [*] --> LoiCSDL : Nếu lỗi cơ sở dữ liệu
+}
+
+XoaThanhCong --> ThongBaoThanhCong : Hiển thị "Xóa thành công"
+ThongBaoThanhCong --> [*]
+
+LoiCSDL --> ThongBaoLoi : Hiển thị lỗi "Không thể xóa"
+ThongBaoLoi --> [*]
+
+@enduml

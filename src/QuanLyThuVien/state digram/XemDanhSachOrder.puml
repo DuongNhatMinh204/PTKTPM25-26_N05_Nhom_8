@@ -1,0 +1,17 @@
+@startuml
+title State Diagram – Xem danh sách đơn mượn sách
+
+[*] --> TruyCapDanhSachDon
+
+TruyCapDanhSachDon --> HienThiDanhSach : Hệ thống hiển thị danh sách đơn mượn
+
+HienThiDanhSach --> ThucHienHanhDong : Người dùng chọn đơn để xem chi tiết, hủy hoặc thanh toán
+HienThiDanhSach --> KetThucXemDanhSach : Người dùng không thực hiện hành động gì, thoát
+
+ThucHienHanhDong --> [*]
+KetThucXemDanhSach --> [*]
+
+TruyCapDanhSachDon --> KhongCoDon : Không có đơn mượn nào trong lịch sử
+KhongCoDon --> [*]
+
+@enduml

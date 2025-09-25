@@ -1,0 +1,16 @@
+@startuml
+title State Diagram – Xem chi tiết sách
+
+[*] --> ChờChọnSách
+
+ChờChọnSách --> XemChiTiet : Chọn sách từ danh sách hoặc tìm kiếm
+
+XemChiTiet --> HiểnThịThôngTin : Hệ thống hiển thị chi tiết sách
+
+HiểnThịThôngTin --> ĐặtMua : Người dùng chọn "Đặt mua"
+HiểnThịThôngTin --> Thoát : Người dùng quay lại giao diện trước
+
+ĐặtMua --> [*]
+Thoát --> [*]
+
+@enduml

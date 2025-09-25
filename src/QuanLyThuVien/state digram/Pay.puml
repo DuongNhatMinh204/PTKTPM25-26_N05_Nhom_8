@@ -1,0 +1,25 @@
+@startuml
+title State Diagram – Thanh toán trong hệ thống thư viện
+
+[*] --> TruyCapThanhToan
+
+TruyCapThanhToan --> ChonPhuongThuc : Người dùng chọn phương thức thanh toán
+
+ChonPhuongThuc --> NhapThongTin : Nhập thông tin thẻ / mã QR / xác nhận
+
+NhapThongTin --> XuLyThanhToan : Hệ thống kiểm tra và xử lý giao dịch
+
+XuLyThanhToan --> ThanhToanThanhCong : Giao dịch hợp lệ
+XuLyThanhToan --> LoiThongTin : Thông tin thanh toán không hợp lệ
+XuLyThanhToan --> GiaoDichThatBai : Giao dịch thất bại
+
+LoiThongTin --> NhapLaiThongTin : Yêu cầu nhập lại thông tin
+GiaoDichThatBai --> ChonLaiPhuongThuc : Yêu cầu thử lại hoặc chọn phương thức khác
+
+NhapLaiThongTin --> XuLyThanhToan
+ChonLaiPhuongThuc --> ChonPhuongThuc
+
+ThanhToanThanhCong --> CapNhatDonHang : Cập nhật trạng thái đơn
+CapNhatDonHang --> [*]
+
+@enduml

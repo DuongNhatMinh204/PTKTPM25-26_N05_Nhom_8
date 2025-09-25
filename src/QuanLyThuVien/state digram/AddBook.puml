@@ -1,0 +1,26 @@
+@startuml
+title State Diagram – Thêm sách (Admin)
+
+[*] --> TrangQuanLySach : Truy cập giao diện quản lý sách
+
+TrangQuanLySach --> MoFormThemSach : Chọn "Thêm sách"
+
+MoFormThemSach --> NhapThongTin : Nhập thông tin sách
+
+NhapThongTin --> BamXacNhan : Nhấn "Xác nhận thêm"
+
+BamXacNhan --> KiemTraDuLieu : Hệ thống kiểm tra dữ liệu
+
+state KiemTraDuLieu {
+  [*] --> DuLieuKhongHopLe : Nếu dữ liệu không hợp lệ
+  [*] --> DuLieuHopLe : Nếu dữ liệu hợp lệ
+}
+
+DuLieuKhongHopLe --> BaoLoi : Hiển thị lỗi
+BaoLoi --> NhapThongTin : Nhập lại thông tin
+
+DuLieuHopLe --> LuuDuLieu : Lưu thông tin vào CSDL
+LuuDuLieu --> HienThiThongBaoThanhCong : Thông báo thêm sách thành công
+HienThiThongBaoThanhCong --> [*]
+
+@enduml

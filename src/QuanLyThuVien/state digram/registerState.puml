@@ -1,0 +1,23 @@
+@startuml
+title State Diagram – Đăng nhập tài khoản thư viện
+
+[*] --> ChờĐăngNhập
+
+ChờĐăngNhập --> NhậpThôngTinĐăngNhập : Chọn "Đăng nhập"
+
+NhậpThôngTinĐăngNhập --> XácThựcThôngTin : Nhập email/SĐT và mật khẩu
+
+XácThựcThôngTin --> ĐăngNhậpThànhCông : Thông tin hợp lệ
+XácThựcThôngTin --> SaiThôngTin : Email/SĐT hoặc mật khẩu không đúng
+XácThựcThôngTin --> TàiKhoảnBịKhóa : Tài khoản bị khóa
+
+SaiThôngTin --> NhậpLạiThôngTin : Nhập lại thông tin
+TàiKhoảnBịKhóa --> KếtThúc : Báo lỗi và yêu cầu liên hệ admin
+
+NhậpLạiThôngTin --> XácThựcThôngTin
+
+ĐăngNhậpThànhCông --> SửDụngHệThống
+SửDụngHệThống --> [*]
+KếtThúc --> [*]
+
+@enduml

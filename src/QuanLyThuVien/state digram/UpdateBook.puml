@@ -1,0 +1,35 @@
+@startuml
+title State Diagram – 3.6.11 Cập nhật sách (Admin)
+
+[*] --> TruyCapQuanLySach : Truy cập trang quản lý sách
+
+TruyCapQuanLySach --> HienThiDanhSach : Hiển thị danh sách sách hiện có
+
+HienThiDanhSach --> MoFormCapNhat : Chọn sách và mở modal cập nhật
+
+MoFormCapNhat --> NhapDuLieuMoi : Nhập thông tin mới và nhấn "Lưu"
+
+NhapDuLieuMoi --> KiemTraDuLieu : Hệ thống kiểm tra tính hợp lệ
+
+state KiemTraDuLieu {
+  [*] --> DuLieuHopLe : Nếu dữ liệu hợp lệ
+  [*] --> DuLieuKhongHopLe : Nếu dữ liệu không hợp lệ
+}
+
+DuLieuHopLe --> LuuCSDL : Lưu thông tin mới vào cơ sở dữ liệu
+
+state LuuCSDL {
+  [*] --> LuuThanhCong : Nếu lưu thành công
+  [*] --> LoiCSDL : Nếu lỗi khi lưu
+}
+
+LuuThanhCong --> ThongBaoThanhCong : Thông báo "Cập nhật thành công"
+ThongBaoThanhCong --> [*]
+
+LoiCSDL --> ThongBaoLoiCSDL : Hiển thị lỗi lưu dữ liệu
+ThongBaoLoiCSDL --> [*]
+
+DuLieuKhongHopLe --> ThongBaoDuLieuLoi : Hiển thị lỗi nhập liệu
+ThongBaoDuLieuLoi --> [*]
+
+@enduml

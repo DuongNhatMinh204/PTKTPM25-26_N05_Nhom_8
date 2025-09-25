@@ -1,0 +1,21 @@
+@startuml
+title State Diagram – 3.6.16 Xem danh sách hàng tồn (Thủ kho)
+
+[*] --> MoGiaoDienQuanLyHangTon : Người dùng mở trang
+
+MoGiaoDienQuanLyHangTon --> GuiYeuCauLayDuLieu : Gửi yêu cầu lấy dữ liệu
+
+GuiYeuCauLayDuLieu --> KiemTraDuLieu : Truy vấn cơ sở dữ liệu
+
+state KiemTraDuLieu {
+  [*] --> CoDuLieu : Nếu có dữ liệu hàng tồn
+  [*] --> KhongCoDuLieu : Nếu không có dữ liệu
+}
+
+CoDuLieu --> HienThiDanhSachHangTon : Hiển thị danh sách hàng tồn
+KhongCoDuLieu --> HienThiThongBaoRong : Hiển thị "Không có hàng tồn"
+
+HienThiDanhSachHangTon --> [*]
+HienThiThongBaoRong --> [*]
+
+@enduml

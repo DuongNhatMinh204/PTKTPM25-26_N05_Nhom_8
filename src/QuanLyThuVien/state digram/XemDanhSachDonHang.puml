@@ -1,0 +1,13 @@
+@startuml
+title State Diagram – 3.6.12 Xem danh sách đơn hàng (Admin)
+
+[*] --> TruyCapTrangQuanLyDon : Admin mở trang "Quản lý đơn hàng"
+
+TruyCapTrangQuanLyDon --> GuiYeuCauDanhSach : Gửi yêu cầu lấy danh sách đơn hàng
+GuiYeuCauDanhSach --> DangTaiDuLieu : Truy vấn cơ sở dữ liệu
+
+DangTaiDuLieu --> HienThiDanhSachDon : Hiển thị danh sách đơn hàng
+
+HienThiDanhSachDon --> [*]
+
+@enduml

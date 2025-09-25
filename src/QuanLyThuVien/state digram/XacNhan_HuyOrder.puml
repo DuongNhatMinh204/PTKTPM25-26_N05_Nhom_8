@@ -1,0 +1,24 @@
+@startuml
+title State Diagram – 3.6.13 Xác nhận / Hủy đơn hàng (Admin)
+
+[*] --> TruyCapQuanLyDonHang : Admin truy cập trang quản lý đơn hàng
+
+TruyCapQuanLyDonHang --> ChonDonHang : Chọn đơn hàng cần thao tác
+
+state ChonDonHang {
+  [*] --> XacNhanDon : Nếu admin nhấn "Xác nhận"
+  [*] --> HuyDon : Nếu admin nhấn "Hủy"
+}
+
+'=== Xác nhận đơn ===
+XacNhanDon --> CapNhatTrangThaiXacNhan : Hệ thống cập nhật trạng thái "Đã xác nhận"
+CapNhatTrangThaiXacNhan --> HienThiThongBaoXacNhan : Hiển thị "Xác nhận thành công"
+HienThiThongBaoXacNhan --> [*]
+
+'=== Hủy đơn ===
+HuyDon --> NhapLyDoHuy : Hiển thị modal nhập lý do
+NhapLyDoHuy --> CapNhatTrangThaiHuy : Hệ thống cập nhật trạng thái "Đã hủy" kèm lý do
+CapNhatTrangThaiHuy --> HienThiThongBaoHuy : Hiển thị "Hủy thành công"
+HienThiThongBaoHuy --> [*]
+
+@enduml

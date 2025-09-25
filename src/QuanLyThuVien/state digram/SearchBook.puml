@@ -1,0 +1,20 @@
+@startuml
+title State Diagram – Tìm kiếm sách
+
+[*] --> ChờTìmKiếm
+
+ChờTìmKiếm --> NhậpTừKhóa : Chọn "Tìm kiếm sách"
+
+NhậpTừKhóa --> XửLýTìmKiếm : Nhập tên sách, tác giả, thể loại
+
+XửLýTìmKiếm --> HiểnThịKếtQuả : Tìm thấy sách phù hợp
+XửLýTìmKiếm --> KhôngTìmThấy : Không có kết quả
+
+KhôngTìmThấy --> ChờTìmKiếm : Nhập từ khóa khác
+
+HiểnThịKếtQuả --> XemChiTiếtSách : Người dùng chọn sách để xem
+
+XemChiTiếtSách --> [*]
+ChờTìmKiếm --> [*]
+
+@enduml

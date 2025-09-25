@@ -1,0 +1,25 @@
+@startuml
+title State Diagram – 3.6.14 Khóa tài khoản người dùng (Admin)
+
+[*] --> TruyCapQuanLyTaiKhoan : Truy cập trang quản lý tài khoản
+
+TruyCapQuanLyTaiKhoan --> ChonTaiKhoan : Chọn tài khoản cần khóa
+
+ChonTaiKhoan --> BamNutKhoa : Nhấn nút "Khóa"
+
+BamNutKhoa --> GuiYeuCauKhoa : Gửi yêu cầu khóa tài khoản đến hệ thống
+
+GuiYeuCauKhoa --> CapNhatTrangThai : Cập nhật trạng thái tài khoản thành "Đã khóa"
+
+state CapNhatTrangThai {
+  [*] --> KhoaThanhCong : Nếu cập nhật thành công
+  [*] --> LoiCapNhat : Nếu có lỗi khi cập nhật
+}
+
+KhoaThanhCong --> ThongBaoThanhCong : Hiển thị "Khóa thành công"
+ThongBaoThanhCong --> [*]
+
+LoiCapNhat --> ThongBaoLoi : Hiển thị thông báo lỗi
+ThongBaoLoi --> [*]
+
+@enduml

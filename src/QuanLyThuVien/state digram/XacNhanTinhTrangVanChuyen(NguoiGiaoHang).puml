@@ -1,0 +1,24 @@
+@startuml
+title State Diagram – 3.6.20 Xác nhận tình trạng vận chuyển đơn hàng (Shipper)
+
+[*] --> DangNhap : Shipper đăng nhập vào hệ thống
+DangNhap --> LayDanhSachDon : Lấy danh sách đơn được phân công
+LayDanhSachDon --> HienThiDanhSachDon : Hiển thị danh sách đơn hàng
+
+HienThiDanhSachDon --> ChonDonHang : Chọn 1 đơn hàng để xác nhận trạng thái
+
+state ChonDonHang {
+  [*] --> GiaoThanhCong : Nếu nhấn "Giao thành công"
+  [*] --> GiaoThatBai : Nếu nhấn "Giao thất bại"
+}
+
+GiaoThanhCong --> CapNhatTrangThaiGiaoThanhCong : Cập nhật trạng thái "Đã giao"
+CapNhatTrangThaiGiaoThanhCong --> HienThiThongBaoThanhCong : Thông báo "Giao thành công"
+HienThiThongBaoThanhCong --> [*]
+
+GiaoThatBai --> NhapLyDoThatBai : Hiển thị modal nhập lý do
+NhapLyDoThatBai --> CapNhatTrangThaiGiaoThatBai : Cập nhật trạng thái "Giao thất bại" kèm lý do
+CapNhatTrangThaiGiaoThatBai --> HienThiThongBaoThatBai : Thông báo "Cập nhật trạng thái thành công"
+HienThiThongBaoThatBai --> [*]
+
+@enduml
