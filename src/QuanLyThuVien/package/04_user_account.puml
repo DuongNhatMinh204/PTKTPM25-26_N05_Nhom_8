@@ -1,0 +1,36 @@
+@startuml
+' File: 04_user_account.puml
+' Title: Package Diagram - Tài khoản người dùng (Đăng ký / Đăng nhập / Khóa / Mở khóa)
+title Package Diagram - Tài khoản người dùng
+
+package "UI" {
+  class LoginPage
+  class RegisterPage
+  class UserManagementPage
+}
+
+package "Controller" {
+  class UserController
+  class AdminController
+}
+
+package "Service" {
+  class UserService
+}
+
+package "Repository" {
+  class UserRepository
+}
+
+package "Model" {
+  class User
+}
+
+LoginPage ..> UserController : authenticate
+RegisterPage ..> UserController : register
+UserManagementPage ..> AdminController : lock/unlock
+UserController ..> UserService
+AdminController ..> UserService
+UserService ..> UserRepository
+UserController ..> User
+@enduml

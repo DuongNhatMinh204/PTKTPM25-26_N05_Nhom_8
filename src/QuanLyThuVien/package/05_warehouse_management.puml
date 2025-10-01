@@ -1,0 +1,40 @@
+@startuml
+' File: 05_warehouse_management.puml
+' Title: Package Diagram - Quản lý kho (Thủ kho) (Xem hàng tồn / Cập nhật số lượng / Xem đơn đã đặt)
+title Package Diagram - Quản lý kho (Thủ kho)
+
+package "UI" {
+  class StockPage
+  class UpdateStockPage
+  class WarehouseOrderListPage
+}
+
+package "Controller" {
+  class WarehouseController
+}
+
+package "Service" {
+  class WarehouseService
+}
+
+package "Repository" {
+  class WarehouseLogRepository
+  class BookRepository
+  class OrderRepository
+}
+
+package "Model" {
+  class Book
+  class WarehouseLog
+  class BookOrder
+}
+
+StockPage ..> WarehouseController : view stock
+UpdateStockPage ..> WarehouseController : update quantity
+WarehouseOrderListPage ..> WarehouseController : view confirmed orders
+WarehouseController ..> WarehouseService
+WarehouseService ..> WarehouseLogRepository
+WarehouseService ..> BookRepository
+WarehouseService ..> OrderRepository
+WarehouseController ..> Book
+@enduml

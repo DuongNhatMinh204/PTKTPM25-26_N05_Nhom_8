@@ -1,0 +1,40 @@
+@startuml
+' File: 03_order_management.puml
+' Title: Package Diagram - Đơn hàng (Khách hàng & Admin)
+title Package Diagram - Đơn hàng (Đặt / Xem / Hủy / Thanh toán / Xác nhận / Hủy bởi Admin)
+
+package "UI" {
+  class OrderListPage
+  class CheckoutPage
+  class AdminOrderPage
+}
+
+package "Controller" {
+  class OrderController
+  class AdminController
+}
+
+package "Service" {
+  class OrderService
+  class PaymentService
+}
+
+package "Repository" {
+  class OrderRepository
+  class OrderDetailRepository
+}
+
+package "Model" {
+  class BookOrder
+  class OrderDetail
+}
+
+OrderListPage ..> OrderController : view customer's orders
+CheckoutPage ..> OrderController : create order / checkout
+AdminOrderPage ..> AdminController : admin actions
+OrderController ..> OrderService
+AdminController ..> OrderService
+OrderService ..> OrderRepository
+OrderService ..> OrderDetailRepository
+OrderController ..> BookOrder
+@enduml

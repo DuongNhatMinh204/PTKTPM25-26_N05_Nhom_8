@@ -1,0 +1,39 @@
+@startuml
+' File: 06_shipping_management.puml
+' Title: Package Diagram - Vận chuyển (Thủ kho / Shipper) (Xác nhận vận chuyển / Cập nhật trạng thái giao hàng)
+title Package Diagram - Vận chuyển
+
+package "UI" {
+  class ShippingListPage
+  class ConfirmDeliveryPage
+}
+
+package "Controller" {
+  class ShippingController
+  class WarehouseController
+}
+
+package "Service" {
+  class ShippingService
+}
+
+package "Repository" {
+  class ShippingRepository
+  class ShipperRepository
+  class OrderRepository
+}
+
+package "Model" {
+  class Shipping
+  class Shipper
+  class BookOrder
+}
+
+ShippingListPage ..> ShippingController : view / assign / confirm
+ConfirmDeliveryPage ..> ShippingController : update delivery status
+ShippingController ..> ShippingService
+ShippingService ..> ShippingRepository
+ShippingService ..> ShipperRepository
+ShippingService ..> OrderRepository
+ShippingController ..> Shipping
+@enduml

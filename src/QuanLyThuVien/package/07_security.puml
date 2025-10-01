@@ -1,0 +1,34 @@
+@startuml
+' File: 07_security.puml
+' Title: Package Diagram - Bảo mật & phân quyền (Spring Security / JWT)
+title Package Diagram - Bảo mật & phân quyền
+
+package "Security" {
+  class SecurityConfig
+  class JwtProvider
+  class AuthFilter
+  class RoleService
+}
+
+package "Controller" {
+  class AuthController
+  class AdminController
+}
+
+package "Service" {
+  class UserService
+  class RoleServiceImpl
+}
+
+package "Repository" {
+  class UserRepository
+  class RoleRepository
+}
+
+SecurityConfig ..> JwtProvider
+SecurityConfig ..> AuthFilter
+AuthController ..> UserService
+AdminController ..> RoleServiceImpl
+UserService ..> UserRepository
+RoleServiceImpl ..> RoleRepository
+@enduml

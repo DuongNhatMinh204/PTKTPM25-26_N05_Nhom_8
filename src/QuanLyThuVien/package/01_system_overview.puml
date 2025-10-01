@@ -1,0 +1,70 @@
+@startuml
+' File: 01_system_overview.puml
+' Title: Package Diagram - Hệ thống quản lý cửa hàng sách điện tử (Tổng thể)
+title Package Diagram - Hệ thống quản lý cửa hàng sách điện tử (Tổng thể)
+
+package "UI" {
+  class LoginPage
+  class RegisterPage
+  class BookListPage
+  class BookDetailPage
+  class OrderListPage
+  class CheckoutPage
+  class AdminDashboard
+  class StorekeeperDashboard
+  class ShippingListPage
+}
+
+package "Controller" {
+  class UserController
+  class BookController
+  class OrderController
+  class WarehouseController
+  class ShippingController
+  class AdminController
+}
+
+package "Service" {
+  class UserService
+  class BookService
+  class OrderService
+  class WarehouseService
+  class ShippingService
+}
+
+package "Repository" {
+  class UserRepository
+  class BookRepository
+  class OrderRepository
+  class OrderDetailRepository
+  class WarehouseLogRepository
+  class ShippingRepository
+  class ShipperRepository
+}
+
+package "Model" {
+  class User
+  class Book
+  class BookOrder
+  class OrderDetail
+  class Shipping
+  class Shipper
+  class WarehouseLog
+}
+
+package "Security" {
+  class AuthFilter
+  class JwtProvider
+  class SecurityConfig
+}
+
+' Quan hệ chính
+UI ..> Controller
+Controller ..> Service
+Service ..> Repository
+Controller ..> Model
+Repository ..> Model
+Security ..> Controller
+Security ..> Service
+
+@enduml

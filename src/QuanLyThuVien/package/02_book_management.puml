@@ -1,0 +1,34 @@
+@startuml
+' File: 02_book_management.puml
+' Title: Package Diagram - Quản lý sách (Thêm / Sửa / Xóa / Tìm kiếm / Xem chi tiết)
+title Package Diagram - Quản lý sách
+
+package "UI" {
+  class BookListPage
+  class BookDetailPage
+  class BookForm
+}
+
+package "Controller" {
+  class BookController
+}
+
+package "Service" {
+  class BookService
+}
+
+package "Repository" {
+  class BookRepository
+}
+
+package "Model" {
+  class Book
+}
+
+BookListPage ..> BookController : view / search
+BookDetailPage ..> BookController : view detail
+BookForm ..> BookController : create / update / delete
+BookController ..> BookService
+BookService ..> BookRepository
+BookController ..> Book
+@enduml
