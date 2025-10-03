@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Shipper</title>
+    <link rel="stylesheet" href="/css/shipper-style.css">
 </head>
 <body>
-  <h1>Trang Cua Shipper</h1>
+
+<!-- 🔝 Navbar -->
+<div class="nav-bar">
+    <div class="nav-title">📦 Shipper</div>
+    <div class="nav-actions">
+        <a onclick="toggleProfile()">👤 Thông tin</a>
+        <a onclick="logout()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<!-- 👤 Profile popup -->
+<div class="profile-popup" id="profile-popup">
+    <h3>Thông tin Shipper</h3>
+    <p><strong>Họ tên:</strong> <span id="profile-name">...</span></p>
+    <p><strong>SĐT:</strong> <span id="profile-phone">...</span></p>
+</div>
+
+<!-- 📋 Danh sách đơn hàng -->
+<div class="container">
+    <h1>📦 Danh sách đơn hàng chờ nhận</h1>
+    <div id="order-list"></div>
+</div>
+
+<script src="/js/shipper-orders.js"></script>
 </body>
 </html>

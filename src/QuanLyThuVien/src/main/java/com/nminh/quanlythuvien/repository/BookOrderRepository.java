@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface BookOrderRepository extends JpaRepository<BookOrder, String> {
     List<BookOrder> findByOrderStatus(OrderStatus orderStatus);
-    List<BookOrder> findByShipping_Shipper_IdAndOrderStatus(String shipperId, OrderStatus orderStatus);
+    List<BookOrder> findByOrderStatusAndShipping_ShipperIsNull(OrderStatus status);
 }

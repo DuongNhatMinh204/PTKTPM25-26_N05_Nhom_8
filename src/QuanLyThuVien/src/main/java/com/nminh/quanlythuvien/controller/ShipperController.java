@@ -1,12 +1,16 @@
 package com.nminh.quanlythuvien.controller;
 
+import com.nminh.quanlythuvien.entity.BookOrder;
 import com.nminh.quanlythuvien.entity.Shipper;
+import com.nminh.quanlythuvien.service.BookOrderService;
 import com.nminh.quanlythuvien.service.ShipperService;
+import com.nminh.quanlythuvien.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,7 +20,13 @@ public class ShipperController {
     @Autowired
     private ShipperService shipperService;
 
-    // ✅ API lấy thông tin shipper theo ID (hoặc bạn có thể dùng SĐT, hoặc thông tin từ Principal khi có login)
+    @Autowired
+    private BookOrderService bookOrderService;
+
+    @Autowired
+    private ShippingService shippingService;
+
+    // ✅ API lấy thông tin shipper theo SĐT (test)
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(@RequestParam String phone) {
         Optional<Shipper> shipper = shipperService.getShipperByPhone(phone);
@@ -27,11 +37,37 @@ public class ShipperController {
         }
     }
 
-    // ✅ (Tuỳ chọn) API này sử dụng thông tin từ Spring Security - nếu bạn có cấu hình đăng nhập rồi
+    // ✅ API lấy profile shipper theo người đăng nhập (nếu login bằng Spring Security)
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(Principal principal) {
-        String phone = principal.getName(); // giả sử bạn dùng SĐT làm username khi login
+        String phone = principal.getName(); // giả sử dùng số điện thoại làm username
         Optional<Shipper> shipper = shipperService.getShipperByPhone(phone);
         return shipper.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // ✅ Xem danh sách các đơn hàng SHIPPING chưa có người nhận
+    @GetMapping("/orders/shipping")
+    public ResponseEntity<?> getShippingOrders() {
+        List<BookOrder> orders = bookOrderService.getOrdersWithShippingStatusAndNoShipper();
+        return ResponseEntity.ok(orders);
+    }
+
+    // ✅ Nhận đơn hàng (gán shipper đang đăng nhập vào đơn)
+    @PutMapping("/orders/{orderId}/accept")
+    public ResponseEntity<?> acceptOrder(@PathVariable String orderId, Principal principal) {
+        String phone = principal.getName();
+        Optional<Shipper> optionalShipper = shipperService.getShipperByPhone(phone);
+
+        if (optionalShipper.isEmpty()) {
+            return ResponseEntity.status(404).body("Shipper không tồn tại");
+        }
+
+        boolean success = shippingService.assignShippingToShipper(orderId, optionalShipper.get());
+
+        if (success) {
+            return ResponseEntity.ok("Nhận đơn hàng thành công");
+        } else {
+            return ResponseEntity.badRequest().body("Không thể nhận đơn (đơn đã được nhận hoặc không tồn tại)");
+        }
     }
 }
