@@ -56,7 +56,7 @@ function fetchOrders() {
 
 function acceptOrder(orderId) {
     const phone = "0912345678"; // Giả lập
-    fetch(`/api/shipper/orders/${orderId}/accept-test?phone=${phone}`, {
+    fetch(`/api/shipper/orders/${orderId}/accept?phone=${phone}`, {
         method: "PUT"
     })
         .then(res => {

@@ -29,11 +29,27 @@ public class ShippingServiceImpl implements ShippingService {
         BookOrder order = optionalOrder.get();
         Shipping shipping = order.getShipping();
 
-        if (shipping == null || shipping.getShipper() != null) return false;
+        // ✅ Nếu đơn hàng chưa có Shipping -> tạo mới
+        if (shipping == null) {
+            shipping = new Shipping();
+            shipping.setBookOrder(order);
+            shipping.setShippingStatus(ShippingStatus.PENDING);
+        }
 
+        // ❌ Nếu shipping đã có shipper rồi thì không được nhận lại
+        if (shipping.getShipper() != null) {
+            return false;
+        }
+
+        // ✅ Gán shipper và cập nhật trạng thái
         shipping.setShipper(shipper);
         shipping.setShippingStatus(ShippingStatus.SHIPPING);
         shippingRepository.save(shipping);
+
+        // ✅ Cập nhật vào đơn hàng (nếu quan hệ 2 chiều)
+        order.setShipping(shipping);
+        bookOrderRepository.save(order);
+
         return true;
     }
 }

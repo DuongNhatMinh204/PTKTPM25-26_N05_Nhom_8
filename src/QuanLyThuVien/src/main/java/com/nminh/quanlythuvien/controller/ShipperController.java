@@ -54,8 +54,7 @@ public class ShipperController {
 
     // ✅ Nhận đơn hàng (gán shipper đang đăng nhập vào đơn)
     @PutMapping("/orders/{orderId}/accept")
-    public ResponseEntity<?> acceptOrder(@PathVariable String orderId, Principal principal) {
-        String phone = principal.getName();
+    public ResponseEntity<?> acceptOrder(@PathVariable String orderId, @RequestParam String phone) {
         Optional<Shipper> optionalShipper = shipperService.getShipperByPhone(phone);
 
         if (optionalShipper.isEmpty()) {
