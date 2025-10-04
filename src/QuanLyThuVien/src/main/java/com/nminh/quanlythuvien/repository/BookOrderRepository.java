@@ -21,4 +21,8 @@ public interface BookOrderRepository extends JpaRepository<BookOrder, String> {
     // ✅ Lấy danh sách đơn theo shipperId, dùng JOIN để đảm bảo shipper được fetch
     @Query("SELECT o FROM BookOrder o JOIN o.shipping s WHERE s.shipper.id = :shipperId")
     List<BookOrder> findOrdersByShipperId(@Param("shipperId") String shipperId);
+
+    @Query("SELECT o FROM BookOrder o WHERE o.shipping.shipper.id = :shipperId AND o.shipping.shippingStatus = 'SHIPPING'")
+    List<BookOrder> getOrdersByShipper(@Param("shipperId") String shipperId);
+
 }
