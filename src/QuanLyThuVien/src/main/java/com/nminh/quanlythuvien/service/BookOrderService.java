@@ -16,4 +16,5 @@ public interface BookOrderService {
     String confirmBookOrderToAproved(String id);
     List<BookOrderDetailResponse> orderDetailList(String id);
     List<BookOrder> getOrdersWithShippingStatusAndNoShipper();
+    List<BookOrder> getOrdersByShipper(String shipperId);
 }

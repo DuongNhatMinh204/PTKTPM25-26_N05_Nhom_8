@@ -69,4 +69,16 @@ public class ShipperController {
             return ResponseEntity.badRequest().body("Không thể nhận đơn (đơn đã được nhận hoặc không tồn tại)");
         }
     }
+    // Lấy danh sách đơn shipper đã nhận
+    @GetMapping("/orders/my")
+    public ResponseEntity<?> getMyOrders(@RequestParam String phone) {
+        Optional<Shipper> optionalShipper = shipperService.getShipperByPhone(phone);
+        if (optionalShipper.isEmpty()) {
+            return ResponseEntity.status(404).body("Shipper không tồn tại");
+        }
+        Shipper shipper = optionalShipper.get();
+        List<BookOrder> orders = bookOrderService.getOrdersByShipper(shipper.getId());
+        return ResponseEntity.ok(orders);
+    }
+
 }

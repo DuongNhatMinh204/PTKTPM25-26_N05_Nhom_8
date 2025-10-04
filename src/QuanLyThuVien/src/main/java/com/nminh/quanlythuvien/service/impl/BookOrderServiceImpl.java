@@ -163,4 +163,8 @@ public class BookOrderServiceImpl implements BookOrderService {
     public List<BookOrder> getOrdersWithShippingStatusAndNoShipper() {
         return bookOrderRepository.findByOrderStatusAndShipping_ShipperIsNull(OrderStatus.SHIPPING);
     }
+    @Override
+    public List<BookOrder> getOrdersByShipper(String shipperId) {
+        return bookOrderRepository.findOrdersByShipperId(shipperId);
+    }
 }
