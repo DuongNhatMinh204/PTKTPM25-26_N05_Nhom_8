@@ -46,4 +46,9 @@ public class BookOrderController {
         ApiResponse apiResponse = new ApiResponse(bookOrderService.orderDetailList(id));
         return apiResponse;
     }
+
+    @GetMapping("/get-all")
+    public ApiResponse getAllBookOrder(@RequestParam String userId){
+        return new ApiResponse(bookOrderService.getAll(userId));
+    }
 }

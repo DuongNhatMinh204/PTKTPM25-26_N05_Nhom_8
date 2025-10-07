@@ -3,6 +3,7 @@ package com.nminh.quanlythuvien.service.impl;
 import com.nminh.quanlythuvien.entity.*;
 import com.nminh.quanlythuvien.enums.ErrorCode;
 import com.nminh.quanlythuvien.enums.OrderStatus;
+import com.nminh.quanlythuvien.enums.ShippingStatus;
 import com.nminh.quanlythuvien.exception.AppException;
 import com.nminh.quanlythuvien.mapper.BookOrderMapper;
 import com.nminh.quanlythuvien.model.request.BookOrderCreateRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,16 +43,35 @@ public class BookOrderServiceImpl implements BookOrderService {
     @Autowired
     private BookOrderTempRepository bookOrderTempRepository;
 
+    @Autowired
+    private ShipperRepository shipperRepository;
+    @Autowired
+    private ShippingRepository shippingRepository;
+
     public List<BookOrder> getApprovedOrders() {
         return bookOrderRepository.findByOrderStatus(OrderStatus.APPROVED);
     }
 
-    public void confirmOrder(String id) {
-        BookOrder order = bookOrderRepository.findById(id)
+    public void confirmOrder(String bookOrderId,String shipperId) {
+        BookOrder order = bookOrderRepository.findById(bookOrderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
+        Shipper shipper = shipperRepository.findById(shipperId)
+                .orElseThrow(() -> new RuntimeException("Shipper not found"));
         if (order.getOrderStatus() != OrderStatus.APPROVED) {
             throw new RuntimeException("Order is not in APPROVED status");
         }
+
+        Shipping shipping = new Shipping();
+
+        shipping.setShippingAddress(order.getAddress());
+        shipping.setShippingDate(new Date());
+        shipping.setShippingStatus(ShippingStatus.PENDING);
+        shipping.setNote("");
+        shipping.setShipper(shipper);
+
+        shippingRepository.save(shipping);
+
+        order.setShipping(shipping);
         order.setOrderStatus(OrderStatus.SHIPPING);
         bookOrderRepository.save(order);
     }
@@ -87,6 +108,7 @@ public class BookOrderServiceImpl implements BookOrderService {
         bookOrder.setAddress(request.getAddress());
         bookOrder.setPaymentType(request.getPaymentType());
         bookOrder.setOrderStatus(OrderStatus.PENDING);
+        bookOrder.setOrderDate(new Date());
         Double totalPrice = 0.0;
 
         bookOrderRepository.save(bookOrder);
@@ -159,12 +181,10 @@ public class BookOrderServiceImpl implements BookOrderService {
         return responses;
 
     }
+
     @Override
-    public List<BookOrder> getOrdersWithShippingStatusAndNoShipper() {
-        return bookOrderRepository.findByOrderStatusAndShipping_ShipperIsNull(OrderStatus.SHIPPING);
-    }
-    @Override
-    public List<BookOrder> getOrdersByShipper(String shipperId) {
-        return bookOrderRepository.findOrdersByShipperId(shipperId);
+    public Object getAll(String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return bookOrderRepository.findByUser(userId);
     }
 }

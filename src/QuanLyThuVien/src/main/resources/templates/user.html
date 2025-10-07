@@ -1,3 +1,44 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="vi">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Hiệu Sách Online</title>-->
+<!--    <link rel="stylesheet" href="/css/user_books.css">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Header &ndash;&gt;-->
+<!--<header class="header">-->
+<!--    <div class="logo">📚 Hiệu Sách Trực Tuyến</div>-->
+<!--    <div class="search-bar">-->
+<!--        <input type="text" id="searchInput" placeholder="Tìm kiếm sách...">-->
+<!--        <button onclick="searchBooks()">🔍</button>-->
+<!--    </div>-->
+<!--    <div class="icons">-->
+<!--        <span class="icon">🛒</span>-->
+<!--        <span class="icon">📦</span>-->
+<!--        <span class="icon">👤</span>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--&lt;!&ndash; Danh sách sách &ndash;&gt;-->
+<!--<main class="book-list" id="bookList">-->
+<!--    &lt;!&ndash; JS load sách &ndash;&gt;-->
+<!--</main>-->
+
+<!--&lt;!&ndash; Modal chi tiết sách &ndash;&gt;-->
+<!--<div id="detailModal" class="modal">-->
+<!--    <div class="modal-content">-->
+<!--        <span class="close" onclick="closeDetailModal()">&times;</span>-->
+<!--        <div id="bookDetail" class="book-detail">-->
+<!--            &lt;!&ndash; Nội dung load bằng JS &ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="/js/user_books.js"></script>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -15,8 +56,9 @@
         <button onclick="searchBooks()">🔍</button>
     </div>
     <div class="icons">
-        <span class="icon">🛒</span>
-        <span class="icon">👤</span>
+        <span class="icon" id="cartIcon">🛒</span>
+        <span class="icon" id="orderIcon">📦</span>
+        <span class="icon" id="userIcon">👤</span>
     </div>
 </header>
 

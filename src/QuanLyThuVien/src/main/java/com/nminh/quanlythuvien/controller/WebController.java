@@ -37,4 +37,12 @@ public class WebController {
     public String cart(){
         return "cart";
     }
+    @GetMapping("/admin_shipper")
+    public String adminshipper(){
+        return "admin_shipper";
+    }
+    @GetMapping("/orders")
+    public String orders(){
+        return "user_orders";
+    }
 }

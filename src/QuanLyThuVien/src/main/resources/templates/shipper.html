@@ -2,35 +2,17 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Shipper</title>
-    <link rel="stylesheet" href="/css/shipper-style.css">
+    <title>📦 Trang Quản Lý Giao Hàng</title>
+    <link rel="stylesheet" href="/css/shipper.css">
 </head>
 <body>
+<h1>🚚 Trang Giao Hàng - Shipper</h1>
 
-<!-- Navbar -->
-<div class="nav-bar">
-    <div class="nav-title">📦 Shipper</div>
-    <div class="nav-actions">
-        <a onclick="goHome()">🏠 Trang chủ</a>
-        <a onclick="toggleProfile()">👤 Thông tin</a>
-        <a onclick="showMyOrders()">📋 Đơn hàng của tôi</a>
-        <a onclick="logout()">🚪 Đăng xuất</a>
-    </div>
-</div>
+<div id="shipper-info"></div>
 
-<!-- Profile popup -->
-<div class="profile-popup" id="profile-popup">
-    <h3>Thông tin Shipper</h3>
-    <p><strong>Họ tên:</strong> <span id="profile-name">...</span></p>
-    <p><strong>SĐT:</strong> <span id="profile-phone">...</span></p>
-</div>
+<h2>📦 Danh Sách Đơn Hàng Cần Giao</h2>
+<div id="orders-container"></div>
 
-<!-- Danh sách đơn hàng -->
-<div class="container">
-    <h1 id="page-title">📦 Danh sách đơn hàng chờ nhận</h1>
-    <div id="order-list"></div>
-</div>
-
-<script src="/js/shipper-orders.js"></script>
+<script src="/js/shipper.js"></script>
 </body>
 </html>
