@@ -23,9 +23,9 @@ public class LibrarianOrderController {
     }
 
     // Xác nhận đơn hàng (chuyển sang SHIPPING)
-    @PutMapping("/{id}/confirm")
-    public ResponseEntity<String> confirmOrder(@PathVariable String id) {
-        bookOrderService.confirmOrder(id);
+    @PutMapping("/confirm")
+    public ResponseEntity<String> confirmOrder(@RequestParam String bookOrderId,@RequestParam String shipperId) {
+        bookOrderService.confirmOrder(bookOrderId,shipperId);
         return ResponseEntity.ok("Xác nhận đơn hàng thành công");
     }
 

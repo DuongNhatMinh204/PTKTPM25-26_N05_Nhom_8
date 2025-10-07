@@ -2,11 +2,11 @@ package com.nminh.quanlythuvien.repository;
 
 import com.nminh.quanlythuvien.entity.BookOrder;
 import com.nminh.quanlythuvien.enums.OrderStatus;
-import com.nminh.quanlythuvien.model.response.DailyRevenue;
+import com.nminh.quanlythuvien.model.response.BookOrderResponse;
 import com.nminh.quanlythuvien.model.response.DailyRevenueProjection;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,4 +44,8 @@ public interface BookOrderRepository extends JpaRepository<BookOrder, String> {
             "GROUP BY d.day\n" +
             "ORDER BY d.day;\n",nativeQuery=true)
     List<DailyRevenueProjection> dailyRevenue(int month, int year);
+
+    @Query(value = "SELECT new com.nminh.quanlythuvien.model.response.BookOrderResponse(b.id, b.address,b.totalPrice, b.paymentType, b.orderDate, b.orderStatus , b.cancelReason) " +
+            " FROM BookOrder b WHERE b.user.id = :userId ")
+    List<BookOrderResponse> findByUser(@Param("userId") String userId);
 }

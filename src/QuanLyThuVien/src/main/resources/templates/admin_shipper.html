@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Quản Lý Tài Khoản Shipper</title>
+    <link rel="stylesheet" href="/css/admin_books.css"> <!-- Dùng lại CSS chung -->
+    <style>
+        /* Bổ sung một chút style riêng */
+        .main-content h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .add-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Modal Ẩn Mặc Định */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        /* Nội Dung Modal */
+        .modal-content {
+            background: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 60%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .close:hover {
+            color: red;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .create-btn {
+            background-color: #007bff;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .create-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li onclick="window.location.href='/admin'">📚 Quản Lý Sách</li>
+            <li onclick="window.location.href='/admin_orders'">📦 Quản Lý Đơn Hàng</li>
+            <li>👤 Quản Lý Người Dùng</li>
+            <li class="active" onclick="window.location.href='/admin_shipper'">🚚 Quản Lý Tài Khoản Shipper</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>🚚 Danh Sách Shipper</h1>
+        <button class="add-btn" onclick="openModal()">+ Tạo Tài Khoản Mới</button>
+
+        <table id="shipperTable">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên Shipper</th>
+                <th>Số Điện Thoại</th>
+            </tr>
+            </thead>
+            <tbody id="shipperTableBody">
+            <!-- JS render -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Tạo Shipper -->
+<div id="createModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Tạo Tài Khoản Shipper</h2>
+        <form id="createShipperForm">
+            <label class="form-label">Họ Và Tên</label>
+            <input type="text" class="form-control" id="fullName" required>
+
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required>
+
+            <label class="form-label">Số Điện Thoại</label>
+            <input type="text" class="form-control" id="phone" required>
+
+            <label class="form-label">Mật Khẩu</label>
+            <input type="password" class="form-control" id="password" required>
+
+            <label class="form-label">Xác Nhận Mật Khẩu</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+
+            <label class="form-label">Ngày Sinh (dd-MM-yyyy)</label>
+            <input type="text" class="form-control" id="birthday" placeholder="vd: 27-12-2004" required>
+
+            <label class="form-label">Giới Tính</label>
+            <select id="gender" class="form-select" required>
+                <option value="">-- Chọn giới tính --</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+            </select>
+
+            <button type="submit" class="create-btn">Tạo Mới</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ====== GỌI API LẤY DANH SÁCH SHIPPER ======
+    async function loadShippers() {
+        const response = await fetch("http://localhost:8080/api/shipper/get-all");
+        const result = await response.json();
+        const tbody = document.getElementById("shipperTableBody");
+        tbody.innerHTML = "";
+
+        if (result.code === 1000 && result.data.length > 0) {
+            result.data.forEach((shipper, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${shipper.shipperName}</td>
+                        <td>${shipper.shipperPhone}</td>
+                    </tr>`;
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="3">Không có shipper nào</td></tr>`;
+        }
+    }
+
+    // ====== MỞ & ĐÓNG MODAL ======
+    function openModal() {
+        document.getElementById("createModal").style.display = "block";
+    }
+    function closeModal() {
+        document.getElementById("createModal").style.display = "none";
+        document.getElementById("createShipperForm").reset();
+    }
+    window.onclick = function (event) {
+        const modal = document.getElementById("createModal");
+        if (event.target === modal) modal.style.display = "none";
+    };
+
+    // ====== GỬI FORM TẠO SHIPPER ======
+    document.getElementById("createShipperForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {
+            fullName: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            password: document.getElementById("password").value,
+            confirmPassword: document.getElementById("confirmPassword").value,
+            birthday: document.getElementById("birthday").value,
+            gender: document.getElementById("gender").value
+        };
+
+        const response = await fetch("http://localhost:8080/api/shipper/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        if (result.code === 1000) {
+            alert("✅ Tạo tài khoản thành công!");
+            closeModal();
+            loadShippers();
+        } else {
+            alert("❌ Tạo thất bại! Vui lòng kiểm tra lại thông tin.");
+        }
+    });
+
+    // ====== LOAD DANH SÁCH LÚC MỞ TRANG ======
+    window.onload = loadShippers;
+</script>
+</body>
+</html>

@@ -17,7 +17,8 @@ function showTab(tabId) {
 }
 
 // Phần Đơn Hàng Đã Duyệt (giữ nguyên)
-const ORDERS_API = "http://localhost:8080/api/librarian/orders";
+const ORDERS_API = "/api/librarian/orders";
+const SHIPPER_API = "/api/shipper/get-all";
 
 async function loadOrders() {
     const response = await fetch(`${ORDERS_API}/approved`);
@@ -49,7 +50,7 @@ async function loadOrders() {
                 <strong>Trạng thái:</strong> ${order.orderStatus}
             </div>
 
-            <div><strong>Khách hàng:</strong> ${user.fullName} - ${user.phone} - ${user.email}</div>
+            
             <div><strong>Địa chỉ giao hàng:</strong> ${order.address}</div>
             <div><strong>Hình thức thanh toán:</strong> ${order.paymentType}</div>
             <div><strong>Tổng tiền:</strong> ${order.totalPrice.toLocaleString()} VND</div>
@@ -57,7 +58,7 @@ async function loadOrders() {
             <div class="order-books">${booksHtml}</div>
 
             <div>
-                <button class="confirm-btn" onclick="confirmOrder('${order.id}')">Xác nhận</button>
+                <button class="confirm-btn" onclick="selectShipper('${order.id}')">Xác nhận</button>
                 <button class="cancel-btn" onclick="cancelOrder('${order.id}')">Hủy đơn</button>
             </div>
         `;
@@ -66,17 +67,68 @@ async function loadOrders() {
     });
 }
 
-async function confirmOrder(orderId) {
-    const response = await fetch(`${ORDERS_API}/${orderId}/confirm`, {
-        method: "PUT"
+/** 🧾 Mở modal chọn shipper khi bấm xác nhận **/
+async function selectShipper(orderId) {
+    // Xóa modal cũ (nếu còn)
+    document.querySelectorAll(".modal").forEach(m => m.remove());
+
+    const response = await fetch(SHIPPER_API);
+    const result = await response.json();
+    const shippers = result.data;
+
+    let options = "";
+    shippers.forEach(s => {
+        options += `<option value="${s.id}">${s.shipperName} - ${s.shipperPhone}</option>`;
     });
 
+    // Sinh ID duy nhất (dựa theo orderId + timestamp)
+    const uniqueSuffix = `${orderId}-${Date.now()}`;
+    const selectId = `shipperSelect-${uniqueSuffix}`;
+    const modalId = `shipperModal-${uniqueSuffix}`;
+
+    // Tạo modal
+    const modalHtml = `
+        <div class="modal" id="${modalId}">
+            <div class="modal-content">
+                <span class="close" onclick="closeShipperModal('${modalId}')">&times;</span>
+                <h3>Chọn Shipper Giao Hàng</h3>
+                <select id="${selectId}" style="width:100%;padding:10px;margin-top:10px;">
+                    <option value="">-- Chọn shipper --</option>
+                    ${options}
+                </select>
+                <div style="margin-top:20px;text-align:right;">
+                    <button onclick="confirmOrder('${orderId}', '${selectId}', '${modalId}')" class="confirm-btn">Xác nhận giao</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+}
+
+/** 🔐 Gửi API xác nhận đơn hàng với shipper đã chọn **/
+async function confirmOrder(orderId, selectId, modalId) {
+    const shipperId = document.getElementById(selectId).value;
+    if (!shipperId) {
+        alert("⚠️ Vui lòng chọn shipper!");
+        return;
+    }
+
+    const url = `${ORDERS_API}/confirm?bookOrderId=${orderId}&shipperId=${shipperId}`;
+    const response = await fetch(url, { method: "PUT" });
+
     if (response.ok) {
-        alert("✅ Đã xác nhận đơn hàng!");
+        alert("✅ Xác nhận đơn hàng thành công!");
+        closeShipperModal(modalId);
         loadOrders();
     } else {
-        alert("❌ Không thể xác nhận!");
+        alert("❌ Xác nhận thất bại!");
     }
+}
+
+/** ❌ Đóng modal chọn shipper **/
+function closeShipperModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.remove();
 }
 
 async function cancelOrder(orderId) {

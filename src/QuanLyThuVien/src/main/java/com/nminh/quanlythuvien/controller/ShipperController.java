@@ -2,9 +2,14 @@ package com.nminh.quanlythuvien.controller;
 
 import com.nminh.quanlythuvien.entity.BookOrder;
 import com.nminh.quanlythuvien.entity.Shipper;
+import com.nminh.quanlythuvien.entity.User;
 import com.nminh.quanlythuvien.enums.OrderStatus;
+import com.nminh.quanlythuvien.model.request.ShipperCreateRequest;
+import com.nminh.quanlythuvien.model.response.ApiResponse;
 import com.nminh.quanlythuvien.repository.BookOrderRepository;
 import com.nminh.quanlythuvien.repository.ShipperRepository;
+import com.nminh.quanlythuvien.repository.UserRepository;
+import com.nminh.quanlythuvien.service.ShipperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +21,33 @@ import java.util.List;
 public class ShipperController {
 
     @Autowired
-    private ShipperRepository shipperRepository;
+    private ShipperService shipperService;
 
-    @Autowired
-    private BookOrderRepository bookOrderRepository;
-
-    // 1. Xem hồ sơ của shipper
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<Shipper> getShipperProfile(@PathVariable String id) {
-        return shipperRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/create")
+    public ApiResponse createShipper(@RequestBody ShipperCreateRequest shipperCreateRequest) {
+        return new ApiResponse(shipperService.createShipper(shipperCreateRequest));
     }
 
-    // 2. Xem tất cả đơn hàng của shipper đang ở trạng thái SHIPPING
-    @GetMapping("/{shipperId}/orders")
-    public ResponseEntity<List<BookOrder>> getShipperOrders(@PathVariable String shipperId) {
-        List<BookOrder> orders = bookOrderRepository
-                .findByShipping_Shipper_IdAndOrderStatus(shipperId, OrderStatus.SHIPPING);
-        return ResponseEntity.ok(orders);
+    @GetMapping("/get-all")
+    public ApiResponse getAllShippers() {
+        return new ApiResponse(shipperService.getAllShipper());
+    }
+
+    @GetMapping("/get-book-order")
+    public ApiResponse getAllBookOrder(@RequestParam String userId) {
+        return new ApiResponse(shipperService.getAllBookOrder(userId));
+    }
+
+    @PutMapping("/start-shipping")
+    public ApiResponse startShipping(@RequestParam String shippingId) {
+        return new ApiResponse(shipperService.startShipping(shippingId));
+    }
+    @PutMapping("/delivered")
+    public ApiResponse delivered(@RequestParam String shippingId) {
+        return new ApiResponse(shipperService.delivered(shippingId));
+    }
+    @PutMapping("/failed")
+    public ApiResponse failed(@RequestParam String shippingId) {
+        return new ApiResponse(shipperService.failed(shippingId));
     }
 }

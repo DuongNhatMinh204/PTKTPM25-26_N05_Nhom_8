@@ -41,6 +41,7 @@ public class BookOrder {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "orderId")
@@ -49,6 +50,7 @@ public class BookOrder {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_id",referencedColumnName = "id")
+    @JsonIgnore
     private Shipping shipping;
 
 }
