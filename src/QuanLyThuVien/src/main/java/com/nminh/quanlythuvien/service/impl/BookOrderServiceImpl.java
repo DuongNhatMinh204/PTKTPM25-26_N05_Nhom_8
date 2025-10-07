@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +88,7 @@ public class BookOrderServiceImpl implements BookOrderService {
         bookOrder.setAddress(request.getAddress());
         bookOrder.setPaymentType(request.getPaymentType());
         bookOrder.setOrderStatus(OrderStatus.PENDING);
+        bookOrder.setOrderDate(new Date());
         Double totalPrice = 0.0;
 
         bookOrderRepository.save(bookOrder);
