@@ -6,37 +6,114 @@
     <link rel="stylesheet" href="/css/storekeeper.css" />
 </head>
 <body>
-<h1>📚 Trang Quản Lý Thủ Kho</h1>
 
-<!-- Tabs để chuyển đổi giữa các chức năng -->
-<div class="tabs">
-    <button class="tab-btn active" onclick="showTab('orders')">Đơn Hàng Đã Duyệt</button>
-    <button class="tab-btn" onclick="showTab('inventory')">Quản Lý Kho Sách</button>
-    <button class="tab-btn" onclick="showTab('logs')">Lịch Sử Log Kho</button>
-</div>
-
-<!-- Phần Đơn Hàng Đã Duyệt (giữ nguyên chức năng đã có) -->
-<div id="orders" class="tab-content" style="display: block;">
-    <h2>📚 Danh sách đơn hàng đã duyệt</h2>
-    <div id="orders-container"></div>
-</div>
-
-<!-- Phần Quản Lý Kho Sách (chức năng cập nhật số sách tồn kho, thêm/bớt) -->
-<div id="inventory" class="tab-content" style="display: none;">
-    <h2>📚 Danh sách sách trong kho</h2>
-    <div id="books"></div>
-</div>
-
-<!-- Phần Xem Lịch Sử Log -->
-<div id="logs" class="tab-content" style="display: none;">
-    <h2>📚 Lịch sử log kho</h2>
-    <div id="logs-container"></div>
-    <div>
-        <input id="bookIdInput" type="text" placeholder="Nhập mã sách để lọc" />
-        <button onclick="loadLogsByBook()">Tìm theo sách</button>
+<!-- Navbar -->
+<div id="navbar">
+    <div class="navbar-left">📦 Quản Lý Thủ Kho</div>
+    <div class="navbar-center">
+        <button class="nav-btn active" onclick="showTab('orders', event)">📄 Đơn Hàng</button>
+        <button class="nav-btn" onclick="showTab('manage-books', event)">🛠️ Quản Lý Sách</button>
+        <button class="nav-btn" onclick="showTab('inventory', event)">📚 Quản Lý Kho</button>
+        <button class="nav-btn" onclick="showTab('logs', event)">🕘 Lịch Sử Log</button>
+    </div>
+    <div class="navbar-right">
+        <div id="logoutIcon" title="Đăng xuất">👤</div>
     </div>
 </div>
 
-<script src="/js/storekeeper.js"></script>
+<!-- Nội dung trang -->
+<div class="page-container">
+    <div id="orders" class="tab-content" style="display: block;">
+        <h2>📦 Danh sách đơn hàng đã duyệt</h2>
+        <div id="orders-container"></div>
+    </div>
+
+    <div id="inventory" class="tab-content" style="display: none;">
+        <h2>📚 Danh sách sách trong kho</h2>
+        <div id="books"></div>
+    </div>
+
+    <div id="logs" class="tab-content" style="display: none;">
+        <h2>🕘 Lịch sử log kho</h2>
+        <div id="logs-container"></div>
+        <div style="margin-top:10px;">
+            <input id="bookIdInput" type="text" placeholder="Nhập mã sách để lọc" />
+            <button id="btnFindLogs" onclick="loadLogsByBook()">Tìm theo sách</button>
+        </div>
+    </div>
+
+    <div id="manage-books" class="tab-content" style="display: none; padding: 16px;">
+        <h2>🛠️ Quản Lý Sách</h2>
+        <div style="margin-bottom: 10px;">
+            <input id="searchKeyword" placeholder="Tìm theo tên sách..." />
+            <button id="searchBtn" onclick="manageSearchBooks(1)">🔍 Tìm</button>
+            <button id="openAddBookBtn" onclick="manageOpenAddModal()">➕ Thêm Sách</button>
+        </div>
+
+        <table id="manageBookTable" style="width:100%; border-collapse:collapse;">
+            <thead>
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên sách</th>
+                <th>Tác giả</th>
+                <th>Thể loại</th>
+                <th>NXB</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="managePagination" style="margin-top: 15px;"></div>
+    </div>
+</div>
+
+<!-- Modal Thêm Sách -->
+<div id="addModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" data-close="addModal">&times;</span>
+        <h3>➕ Thêm sách mới</h3>
+        <form id="addBookForm">
+            <div class="form-row"><label>Ảnh bìa</label><input id="bookImage" type="file" accept="image/*" /></div>
+            <div class="form-row"><label>Tên sách</label><input id="bookName" type="text" required /></div>
+            <div class="form-row"><label>Tác giả</label><input id="authorship" type="text" /></div>
+            <div class="form-row"><label>Thể loại</label><input id="bookGerne" type="text" /></div>
+            <div class="form-row"><label>NXB</label><input id="bookPublisher" type="text" /></div>
+            <div class="form-row"><label>Số lượng</label><input id="quantity" type="number" min="0" value="0" /></div>
+            <div class="form-row"><label>Giá</label><input id="price" type="number" step="0.01" value="0" /></div>
+            <div style="text-align:right; margin-top:10px;">
+                <button type="button" class="btn-close" data-close="addModal">Hủy</button>
+                <button type="submit" class="confirm-btn">Thêm sách</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Cập Nhật Sách -->
+<div id="updateModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" data-close="updateModal">&times;</span>
+        <h3>✏️ Cập nhật sách</h3>
+        <form id="updateBookForm">
+            <input id="updateBookId" type="hidden" />
+            <div class="form-row"><label>Ảnh (preview)</label><img id="updatePreviewImage" src="/images/fallback.png" alt="preview" /></div>
+            <div class="form-row"><label>Thay ảnh</label><input id="updateBookImage" type="file" accept="image/*" /></div>
+            <div class="form-row"><label>Tên sách</label><input id="updateBookName" type="text" /></div>
+            <div class="form-row"><label>Tác giả</label><input id="updateAuthorship" type="text" /></div>
+            <div class="form-row"><label>Thể loại</label><input id="updateBookGerne" type="text" /></div>
+            <div class="form-row"><label>NXB</label><input id="updateBookPublisher" type="text" /></div>
+            <div class="form-row"><label>Số lượng</label><input id="updateQuantity" type="number" min="0" /></div>
+            <div class="form-row"><label>Giá</label><input id="updatePrice" type="number" step="0.01" /></div>
+            <div style="text-align:right; margin-top:10px;">
+                <button type="button" class="btn-close" data-close="updateModal">Hủy</button>
+                <button type="submit" class="confirm-btn">Cập nhật</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script -->
+<script src="/js/storekeeper.js" defer></script>
 </body>
 </html>
