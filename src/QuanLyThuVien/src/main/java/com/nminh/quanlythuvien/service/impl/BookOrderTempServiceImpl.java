@@ -29,6 +29,11 @@ public class BookOrderTempServiceImpl implements BookOrderTempService {
                 .status(true)
                 .build();
         bookOrderTempRepository.save(bookOrderTemp);
+
+        Book book = bookRepository.findById(bookOrderTempCreateDTO.getBookId()).get();
+        book.setQuantity(book.getQuantity() - bookOrderTempCreateDTO.getQuantity());
+        bookRepository.save(book);
+
         return BookOrderTempCreateResponseDTO.builder()
                 .Id(bookOrderTemp.getId())
                 .bookId(bookOrderTemp.getBookId())
