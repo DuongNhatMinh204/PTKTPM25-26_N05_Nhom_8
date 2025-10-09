@@ -1,13 +1,16 @@
 package com.nminh.quanlythuvien.service.impl;
 
 import com.nminh.quanlythuvien.constant.Constants;
+import com.nminh.quanlythuvien.entity.BookOrder;
 import com.nminh.quanlythuvien.entity.Shipper;
 import com.nminh.quanlythuvien.entity.Shipping;
 import com.nminh.quanlythuvien.entity.User;
 import com.nminh.quanlythuvien.enums.ErrorCode;
+import com.nminh.quanlythuvien.enums.OrderStatus;
 import com.nminh.quanlythuvien.enums.ShippingStatus;
 import com.nminh.quanlythuvien.exception.AppException;
 import com.nminh.quanlythuvien.model.request.ShipperCreateRequest;
+import com.nminh.quanlythuvien.repository.BookOrderRepository;
 import com.nminh.quanlythuvien.repository.ShipperRepository;
 import com.nminh.quanlythuvien.repository.ShippingRepository;
 import com.nminh.quanlythuvien.repository.UserRepository;
@@ -28,6 +31,9 @@ public class ShipperServiceImpl implements ShipperService {
     private ShipperRepository shipperRepository;
     @Autowired
     private ShippingRepository shippingRepository;
+
+    @Autowired
+    private BookOrderRepository bookOrderRepository;
 
     @Override
     public Object createShipper(ShipperCreateRequest shipperCreateRequest) {
@@ -76,6 +82,10 @@ public class ShipperServiceImpl implements ShipperService {
         shipping.setShippingStatus(ShippingStatus.DELIVERED);
         shippingRepository.save(shipping);
 
+        BookOrder bookOrder = bookOrderRepository.findByShipping(shipping);
+        bookOrder.setOrderStatus(OrderStatus.COMPLETED);
+        bookOrderRepository.save(bookOrder);
+
         return shipping;
     }
 
@@ -84,6 +94,10 @@ public class ShipperServiceImpl implements ShipperService {
         Shipping shipping = shippingRepository.findById(shippingId).orElseThrow();
         shipping.setShippingStatus(ShippingStatus.FAILED);
         shippingRepository.save(shipping);
+
+        BookOrder bookOrder = bookOrderRepository.findByShipping(shipping);
+        bookOrder.setOrderStatus(OrderStatus.CANCELLED);
+        bookOrderRepository.save(bookOrder);
         return shipping;
     }
 }

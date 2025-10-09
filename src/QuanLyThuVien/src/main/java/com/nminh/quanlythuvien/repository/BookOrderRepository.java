@@ -1,6 +1,7 @@
 package com.nminh.quanlythuvien.repository;
 
 import com.nminh.quanlythuvien.entity.BookOrder;
+import com.nminh.quanlythuvien.entity.Shipping;
 import com.nminh.quanlythuvien.enums.OrderStatus;
 import com.nminh.quanlythuvien.model.response.BookOrderResponse;
 import com.nminh.quanlythuvien.model.response.DailyRevenueProjection;
@@ -48,4 +49,7 @@ public interface BookOrderRepository extends JpaRepository<BookOrder, String> {
     @Query(value = "SELECT new com.nminh.quanlythuvien.model.response.BookOrderResponse(b.id, b.address,b.totalPrice, b.paymentType, b.orderDate, b.orderStatus , b.cancelReason) " +
             " FROM BookOrder b WHERE b.user.id = :userId ")
     List<BookOrderResponse> findByUser(@Param("userId") String userId);
+
+    @Query("SELECT b FROM BookOrder b WHERE b.shipping = :shipping")
+    BookOrder findByShipping(@Param("shipping") Shipping shipping);
 }
