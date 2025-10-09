@@ -45,4 +45,8 @@ public class WebController {
     public String orders(){
         return "user_orders";
     }
+    @GetMapping("/admin_statistic")
+    public String adminstatistic(){
+        return "admin_statistic";
+    }
 }
