@@ -75,6 +75,7 @@ public class ShipperServiceImpl implements ShipperService {
         Shipping shipping = shippingRepository.findById(shippingId).orElseThrow();
         shipping.setShippingStatus(ShippingStatus.DELIVERED);
         shippingRepository.save(shipping);
+
         return shipping;
     }
 
