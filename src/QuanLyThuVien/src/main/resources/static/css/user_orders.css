@@ -4,11 +4,12 @@ body {
     background: #f3f6fa;
 }
 
+/* Header */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(90deg, #1976d2, #42a5f5);
+    background: linear-gradient(90deg, #2f855a, #48bb78); /* ✅ xanh lá */
     color: white;
     padding: 12px 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -20,14 +21,14 @@ body {
 .back-btn {
     background: white;
     border: none;
-    color: #1976d2;
+    color: #2f855a; /* ✅ xanh lá */
     padding: 8px 16px;
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
 }
 .back-btn:hover {
-    background: #e3f2fd;
+    background: #c6f6d5; /* ✅ hover xanh lá nhạt */
 }
 
 .order-list {
@@ -44,7 +45,7 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .order-card h3 {
-    color: #1976d2;
+    color: #2f855a; /* ✅ xanh lá */
 }
 .empty {
     text-align: center;

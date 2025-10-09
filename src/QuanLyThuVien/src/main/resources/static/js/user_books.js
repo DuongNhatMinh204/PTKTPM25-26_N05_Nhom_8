@@ -114,6 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("orderIcon").onclick = () => {
         window.location.href = "/orders";
     };
+
+    // Icon người dùng 👤 → Đăng xuất
+    document.getElementById("userIcon").onclick = () => {
+        localStorage.removeItem("userId"); // Xoá userId khỏi localStorage
+        alert("👋 Bạn đã đăng xuất!");
+        window.location.href = "/login"; // Chuyển hướng về trang đăng nhập
+    };
 });
 
 function loadBooks() {

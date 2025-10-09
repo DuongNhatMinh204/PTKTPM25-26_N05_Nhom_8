@@ -5,7 +5,6 @@
     <title>Admin - Quản Lý Tài Khoản Shipper</title>
     <link rel="stylesheet" href="/css/admin_books.css"> <!-- Dùng lại CSS chung -->
     <style>
-        /* Bổ sung một chút style riêng */
         .main-content h1 {
             margin-bottom: 20px;
         }
@@ -46,7 +45,7 @@
             background-color: #218838;
         }
 
-        /* Modal Ẩn Mặc Định */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -59,7 +58,6 @@
             background-color: rgba(0,0,0,0.5);
         }
 
-        /* Nội Dung Modal */
         .modal-content {
             background: #fff;
             margin: 5% auto;
@@ -109,6 +107,27 @@
             background-color: #0056b3;
         }
 
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-profile {
+            cursor: pointer;
+            font-weight: 600;
+            color: #007bff;
+            background: #e9f0fa;
+            padding: 8px 14px;
+            border-radius: 20px;
+            transition: background 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: #d0e4f7;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +136,6 @@
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
-            <li onclick="window.location.href='/admin'">📚 Quản Lý Sách</li>
             <li onclick="window.location.href='/admin_orders'">📦 Quản Lý Đơn Hàng</li>
             <li>👤 Quản Lý Người Dùng</li>
             <li class="active" onclick="window.location.href='/admin_shipper'">🚚 Quản Lý Tài Khoản Shipper</li>
@@ -126,6 +144,11 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Topbar Đăng xuất -->
+        <div class="topbar">
+            <div class="user-profile" onclick="logout()">👤 Đăng xuất</div>
+        </div>
+
         <h1>🚚 Danh Sách Shipper</h1>
         <button class="add-btn" onclick="openModal()">+ Tạo Tài Khoản Mới</button>
 
@@ -244,7 +267,15 @@
         }
     });
 
-    // ====== LOAD DANH SÁCH LÚC MỞ TRANG ======
+    // ====== ĐĂNG XUẤT ======
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        alert("Đăng xuất thành công!");
+        window.location.href = "/login";
+    }
+
+    // ====== LOAD LÚC MỞ TRANG ======
     window.onload = loadShippers;
 </script>
 </body>

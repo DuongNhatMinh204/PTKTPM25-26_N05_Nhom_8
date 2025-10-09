@@ -2,8 +2,30 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Quản Lý Sách</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="/css/admin_books.css">
+    <style>
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-profile {
+            cursor: pointer;
+            font-weight: 600;
+            color: #007bff;
+            background: #e9f0fa;
+            padding: 8px 14px;
+            border-radius: 20px;
+            transition: background 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: #d0e4f7;
+        }
+    </style>
 </head>
 <body>
 <div class="admin-container">
@@ -11,83 +33,32 @@
     <div class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
-            <li class="active">📚 Quản Lý Sách</li>
             <li onclick="window.location.href='/admin_orders'">📦 Quản Lý Đơn Hàng</li>
             <li>👤 Quản Lý Người Dùng</li>
-            <li  onclick="window.location.href='/admin_shipper'">🚚 Quản Lý Tài Khoản Shipper</li>
+            <li onclick="window.location.href='/admin_shipper'">🚚 Quản Lý Tài Khoản Shipper</li>
         </ul>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1>
-            Danh Sách Sách
-        </h1>
-        <div class="search-box">
-            <input type="text" id="searchKeyword" placeholder="Tìm kiếm sách...">
-            <button onclick="searchBooks()">🔍</button>
+        <!-- Topbar chứa nút đăng xuất -->
+        <div class="topbar">
+            <div class="user-profile" onclick="logout()">👤 Đăng xuất</div>
         </div>
-        <button class="btn-add" onclick="openAddModal()">+ Thêm Sách</button>
 
-        <table id="bookTable">
-            <thead>
-            <tr>
-                <th>Ảnh</th>
-                <th>Tên Sách</th>
-                <th>Tác Giả</th>
-                <th>Thể Loại</th>
-                <th>NXB</th>
-                <th>Số Lượng</th>
-                <th>Giá</th>
-                <th>Hành Động</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Data load bằng JS -->
-            </tbody>
-        </table>
-        <!-- Thanh phân trang -->
-        <div id="pagination" class="pagination"></div>
+        <h1>Admin Dashboard</h1>
+        <p>Chọn chức năng từ menu bên trái.</p>
     </div>
 </div>
 
-<!-- Modal thêm sách -->
-<div id="addModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeAddModal()">&times;</span>
-        <h2>Thêm Sách Mới</h2>
-        <form id="addBookForm">
-            <input type="text" id="bookName" placeholder="Tên sách" required>
-            <input type="text" id="authorship" placeholder="Tác giả" required>
-            <input type="text" id="bookGerne" placeholder="Thể loại" required>
-            <input type="text" id="bookPublisher" placeholder="NXB" required>
-            <input type="number" id="quantity" placeholder="Số lượng" required>
-            <input type="number" id="price" placeholder="Giá" step="0.01" required>
-            <input type="file" id="bookImage" accept="image/*" required>
-            <button type="submit">Thêm</button>
-        </form>
-    </div>
-</div>
-<!-- Modal cập nhật sách -->
-<div id="updateModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeUpdateModal()">&times;</span>
-        <h2>Cập Nhật Sách</h2>
-        <form id="updateBookForm">
-            <input type="hidden" id="updateBookId">
-            <input type="text" id="updateBookName" placeholder="Tên sách" required>
-            <input type="text" id="updateAuthorship" placeholder="Tác giả" required>
-            <input type="text" id="updateBookGerne" placeholder="Thể loại" required>
-            <input type="text" id="updateBookPublisher" placeholder="NXB" required>
-            <input type="number" id="updateQuantity" placeholder="Số lượng" required>
-            <input type="number" id="updatePrice" placeholder="Giá" step="0.01" required>
-            <img id="updatePreviewImage" src="" alt="Book Image" style="width:80px; display:block; margin:10px auto;">
-            <input type="file" id="updateBookImage" accept="image/*">
-            <button type="submit">Cập Nhật</button>
-        </form>
-    </div>
-</div>
-
-<script src="/js/admin_books.js"></script>
+<script>
+    function logout() {
+        // Xoá dữ liệu đăng nhập nếu có
+        localStorage.clear();
+        sessionStorage.clear();
+        alert("Đăng xuất thành công!");
+        window.location.href = "/login"; // Điều hướng về trang đăng nhập
+    }
+</script>
 </body>
 </html>
