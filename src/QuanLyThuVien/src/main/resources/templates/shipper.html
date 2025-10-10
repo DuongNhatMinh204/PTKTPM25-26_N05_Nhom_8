@@ -2,16 +2,46 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>📦 Trang Quản Lý Giao Hàng</title>
+    <title>📦 Trang Quản Lý Giao Hàng - Shipper</title>
     <link rel="stylesheet" href="/css/shipper.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-<h1>🚚 Trang Giao Hàng - Shipper</h1>
+<header class="topbar">
+    <h1>🚚 Trang Giao Hàng - Shipper</h1>
+    <div class="topbar-right">
+        <div class="user-block">
+            <span class="user-icon" id="header-avatar">👤</span>
+            <div class="user-name" id="header-username">Tên Shipper</div>
+        </div>
+        <button id="btn-logout" class="btn-logout">Đăng xuất</button>
+    </div>
+</header>
 
-<div id="shipper-info"></div>
+<main class="container">
+    <!-- PROFILE -->
+    <section class="profile-section">
+        <div class="profile-card">
+            <div class="profile-left">
+                <div id="profile-avatar" class="profile-avatar">👤</div>
+                <div class="profile-meta">
+                    <h3 id="profile-name">Tên Shipper</h3>
+                    <p id="profile-phone" class="muted">SĐT: —</p>
+                </div>
+            </div>
+            <div class="profile-right">
+                <div class="profile-stats">
+                    <div><strong>Đơn đang giao:</strong> <span id="stat-shipping">—</span></div>
+                    <div><strong>Đã giao:</strong> <span id="stat-delivered">—</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<h2>📦 Danh Sách Đơn Hàng Cần Giao</h2>
-<div id="orders-container"></div>
+    <!-- DANH SÁCH ĐƠN HÀNG -->
+    <h2>📦 Danh Sách Đơn Hàng Cần Giao</h2>
+    <div id="orders-container"></div>
+</main>
 
 <script src="/js/shipper.js"></script>
 </body>
