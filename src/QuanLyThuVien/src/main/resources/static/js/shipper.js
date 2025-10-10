@@ -1,4 +1,3 @@
-// shipper.js (bản rút gọn & đã loại bỏ chức năng chỉnh sửa email/status)
 const API_URL = "http://localhost:8080/api/shipper/get-book-order";
 const BASE_API = "http://localhost:8080/api/shipper";
 
