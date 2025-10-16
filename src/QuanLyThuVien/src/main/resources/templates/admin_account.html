@@ -141,7 +141,7 @@
 </div>
 
 <script>
-    const API_GET_USERS = "http://localhost:8080/user/get-all";
+    const API_GET_USERS = "http://localhost:8080/user/get-all-acc";
     const API_CHANGE_STATUS = "http://localhost:8080/user/change-status/";
 
     // Load danh sách người dùng
@@ -157,14 +157,13 @@
             users.forEach(user => {
                 const tr = document.createElement("tr");
 
-                // Trạng thái (1 = hoạt động, 0 = khóa)
                 const statusText = user.status === 1
                     ? "<span class='status-active'>Hoạt động</span>"
                     : "<span class='status-locked'>Đã khóa</span>";
 
                 const actionBtn = `
                     <button class="btn ${user.status === 1 ? 'btn-lock' : 'btn-unlock'}"
-                        onclick="changeStatus('${user.phone}', ${user.status})">
+                        onclick="changeStatus('${user.id}', ${user.status})">
                         ${user.status === 1 ? 'Khóa' : 'Mở khóa'}
                     </button>
                 `;
@@ -174,7 +173,7 @@
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
                     <td>${user.birthday || "Không rõ"}</td>
-                    <td>${user.gender}</td>
+                    <td>${user.gender || "Không rõ"}</td>
                     <td>${user.role.replace("ROLE_", "")}</td>
                     <td>${statusText}</td>
                     <td>${actionBtn}</td>
@@ -188,8 +187,8 @@
         }
     }
 
-    // Gọi API để thay đổi trạng thái (khóa/mở)
-    async function changeStatus(phone, currentStatus) {
+    // Gọi API để thay đổi trạng thái
+    async function changeStatus(userId, currentStatus) {
         const confirmMsg = currentStatus === 1
             ? "Bạn có chắc chắn muốn KHÓA tài khoản này không?"
             : "Bạn có muốn MỞ KHÓA tài khoản này không?";
@@ -197,13 +196,13 @@
         if (!confirm(confirmMsg)) return;
 
         try {
-            const response = await fetch(API_CHANGE_STATUS + phone, {
+            const response = await fetch(API_CHANGE_STATUS + userId, {
                 method: "PUT"
             });
             const result = await response.json();
             if (result.code === 1003) {
                 alert("✅ Thay đổi trạng thái thành công!");
-                loadUsers(); // Reload danh sách
+                loadUsers();
             } else {
                 alert("❌ Không thể thay đổi trạng thái!");
             }
@@ -212,6 +211,8 @@
             alert("⚠️ Lỗi kết nối server!");
         }
     }
+
+    // Tải dữ liệu ban đầu
     loadUsers();
 </script>
 </body>

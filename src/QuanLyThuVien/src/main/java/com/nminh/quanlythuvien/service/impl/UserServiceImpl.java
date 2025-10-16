@@ -7,6 +7,7 @@ import com.nminh.quanlythuvien.exception.AppException;
 import com.nminh.quanlythuvien.mapper.UserMapper;
 import com.nminh.quanlythuvien.model.request.UserSignInRequestDTO;
 import com.nminh.quanlythuvien.model.request.UserSignUpRequestDTO;
+import com.nminh.quanlythuvien.model.response.UserDetailResponse;
 import com.nminh.quanlythuvien.model.response.UserInfoResponse;
 import com.nminh.quanlythuvien.model.response.UserSignInResponseDTO;
 import com.nminh.quanlythuvien.model.response.UserSignUpResponseDTO;
@@ -94,5 +95,30 @@ public class UserServiceImpl implements UserService {
             userInfoResponses.add(userInfoResponse);
         }
         return userInfoResponses;
+    }
+
+    @Override
+    public List<UserDetailResponse> allDetail() {
+        List<User> users = userRepository.findAll();
+        List<UserDetailResponse> responses = new ArrayList<>();
+        for(User user : users){
+            if(user.getPhone().equals("0000000000")){
+                continue;
+            }
+            UserDetailResponse userDetailResponse = new UserDetailResponse();
+
+            userDetailResponse.setId(user.getId());
+            userDetailResponse.setPhone(user.getPhone());
+            userDetailResponse.setFullName(user.getFullName());
+            userDetailResponse.setRole(user.getRole());
+            userDetailResponse.setStatus(user.getStatus());
+            userDetailResponse.setEmail(user.getEmail());
+            userDetailResponse.setGender(user.getGender());
+            userDetailResponse.setBirthday(user.getBirthday());
+
+            responses.add(userDetailResponse);
+
+        }
+        return responses;
     }
 }

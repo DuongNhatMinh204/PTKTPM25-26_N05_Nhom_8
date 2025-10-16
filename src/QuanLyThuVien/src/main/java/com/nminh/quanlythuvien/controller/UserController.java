@@ -43,4 +43,10 @@ public class UserController {
         ApiResponse apiResponse = new ApiResponse(1004,userService.allUserInfo());
         return apiResponse;
     }
+    @GetMapping("/get-all-acc")
+    public ApiResponse getAllAccount() {
+        log.info("User getAll");
+        ApiResponse apiResponse = new ApiResponse(1004,userService.allDetail());
+        return apiResponse;
+    }
 }
