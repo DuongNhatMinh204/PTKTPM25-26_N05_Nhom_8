@@ -49,4 +49,10 @@ public class WebController {
     public String adminstatistic(){
         return "admin_statistic";
     }
+    @GetMapping("/admin_account")
+    public String adminaccount(){
+        return "admin_account";
+    }
+
+
 }
