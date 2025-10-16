@@ -89,11 +89,6 @@ async function loadShipperOrders() {
     }
 }
 
-/* ========================== */
-/* ===== CÁC HÀM GỌI API ==== */
-/* ========================== */
-
-// ✅ Bắt đầu giao hàng
 async function startShipping(shippingId) {
     if (!confirm("🚚 Xác nhận bắt đầu giao hàng đơn này?")) return;
 
@@ -113,7 +108,6 @@ async function startShipping(shippingId) {
     }
 }
 
-// ✅ Xác nhận giao thành công
 async function markDelivered(shippingId) {
     if (!confirm("✅ Xác nhận đơn hàng đã giao thành công?")) return;
 
@@ -153,5 +147,4 @@ async function markFailed(shippingId) {
     }
 }
 
-// Load danh sách khi mở trang
 loadShipperOrders();
