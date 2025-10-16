@@ -1,62 +1,91 @@
+// ==================== ⚙️ CẤU HÌNH ====================
 const API_BASE = "/book";
 const UPLOAD_API = "/api/upload/image";
 
 let currentPage = 1;
 let totalPages = 1;
-const pageSize = 5; // số sách mỗi trang
+const pageSize = 5;
+const bookCache = {}; // 🆕 cache nhẹ để giảm gọi API
 
-// Load danh sách sách có phân trang
+// ==================== ⚡ HIỂN THỊ LOADING ====================
+function showLoading() { // 🆕
+    const tbody = document.querySelector("#bookTable tbody");
+    tbody.innerHTML = `
+        <tr><td colspan="8" style="text-align:center; padding: 20px;">
+            <div class="loader"></div> Đang tải dữ liệu...
+        </td></tr>
+    `;
+}
+
+// ==================== ⚡ HIỂN THỊ SÁCH ====================
+function renderBooks(data) { // 🆕 gom logic hiển thị chung
+    const tbody = document.querySelector("#bookTable tbody");
+    let html = "";
+
+    data.books.forEach(book => {
+        html += `
+            <tr>
+                <td><img src="${book.imageUrl}" alt="Book Image"></td>
+                <td>${book.bookName}</td>
+                <td>${book.authorship}</td>
+                <td>${book.bookGerne}</td>
+                <td>${book.bookPublisher}</td>
+                <td>${book.quantity}</td>
+                <td>${book.price} $</td>
+                <td>
+                    <button class="btn-update" onclick="updateBook('${book.id}')">Cập Nhật</button>
+                    <button class="btn-delete" onclick="deleteBook('${book.id}')">Xóa</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+}
+
+// ==================== ⚡ LOAD DANH SÁCH SÁCH ====================
 async function loadBooks(page = 1) {
+    // 🆕 sử dụng cache để giảm gọi API
+    if (bookCache[page]) {
+        renderBooks(bookCache[page]);
+        currentPage = bookCache[page].currentPage;
+        totalPages = bookCache[page].totalPages;
+        renderPagination();
+        return;
+    }
+
+    showLoading(); // 🆕 loading khi chờ dữ liệu
+
     try {
         const response = await fetch(`${API_BASE}/get-all?page=${page}&size=${pageSize}`);
         const result = await response.json();
 
         if (result.code === 1000) {
-            const tbody = document.querySelector("#bookTable tbody");
-            tbody.innerHTML = "";
+            bookCache[page] = result.data; // 🆕 lưu cache
+            renderBooks(result.data);
 
-            result.data.books.forEach(book => {
-                const row = `
-                    <tr>
-                        <td><img src="${book.imageUrl}" alt="Book Image"></td>
-                        <td>${book.bookName}</td>
-                        <td>${book.authorship}</td>
-                        <td>${book.bookGerne}</td>
-                        <td>${book.bookPublisher}</td>
-                        <td>${book.quantity}</td>
-                        <td>${book.price} $</td>
-                        <td>
-                            <button class="btn-update" onclick="updateBook('${book.id}')">Cập Nhật</button>
-                            <button class="btn-delete" onclick="deleteBook('${book.id}')">Xóa</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-
-            // cập nhật phân trang
             currentPage = result.data.currentPage;
             totalPages = result.data.totalPages;
             renderPagination();
+
+            scrollToTop(); // 🆕 cuộn lên đầu bảng
         }
     } catch (error) {
         console.error("Error loading books:", error);
     }
 }
 
-// Hiển thị nút phân trang
+// ==================== ⚡ PHÂN TRANG ====================
 function renderPagination() {
     const paginationDiv = document.getElementById("pagination");
     paginationDiv.innerHTML = "";
 
-    // Nút Previous
     const prevBtn = document.createElement("button");
     prevBtn.innerText = "«";
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => loadBooks(currentPage - 1);
     paginationDiv.appendChild(prevBtn);
 
-    // Nút số trang
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.innerText = i;
@@ -65,17 +94,14 @@ function renderPagination() {
         paginationDiv.appendChild(btn);
     }
 
-    // Nút Next
     const nextBtn = document.createElement("button");
     nextBtn.innerText = "»";
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => loadBooks(currentPage + 1);
     paginationDiv.appendChild(nextBtn);
 }
-// Load khi mở trang
-loadBooks();
 
-// Xóa sách
+// ==================== ⚡ XÓA SÁCH ====================
 async function deleteBook(id) {
     if (!confirm("Bạn có chắc chắn muốn xóa sách này?")) return;
 
@@ -85,7 +111,7 @@ async function deleteBook(id) {
 
         if (result.code === 1000) {
             alert("Xóa thành công!");
-            loadBooks();
+            loadBooks(currentPage); // ⚡ giữ nguyên trang hiện tại
         } else {
             alert("Xóa thất bại!");
         }
@@ -94,10 +120,9 @@ async function deleteBook(id) {
     }
 }
 
-// Cập nhật sách
+// ==================== ⚡ CẬP NHẬT SÁCH ====================
 let currentUpdateId = null;
 
-// Mở modal cập nhật và điền sẵn dữ liệu
 function updateBook(id) {
     const row = document.querySelector(`button[onclick="updateBook('${id}')"]`).closest("tr");
     const cells = row.querySelectorAll("td");
@@ -114,16 +139,16 @@ function updateBook(id) {
     document.getElementById("updatePreviewImage").src = imgSrc;
 
     currentUpdateId = id;
-    document.getElementById("updateModal").style.display = "block";
+    document.getElementById("updateModal").classList.add("show"); // 🆕 hiệu ứng mượt
 }
 
-// Đóng modal cập nhật
 function closeUpdateModal() {
-    document.getElementById("updateModal").style.display = "none";
+    const modal = document.getElementById("updateModal");
+    modal.classList.remove("show"); // 🆕
+    setTimeout(() => modal.style.display = "none", 200); // 🆕 animation
     currentUpdateId = null;
 }
 
-// Lắng nghe sự kiện submit form cập nhật
 document.getElementById("updateBookForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -134,11 +159,7 @@ document.getElementById("updateBookForm").addEventListener("submit", async (e) =
     if (fileInput.files.length > 0) {
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
-
-        const uploadRes = await fetch(UPLOAD_API, {
-            method: "POST",
-            body: formData
-        });
+        const uploadRes = await fetch(UPLOAD_API, { method: "POST", body: formData });
         imageUrl = await uploadRes.text();
     }
 
@@ -163,7 +184,7 @@ document.getElementById("updateBookForm").addEventListener("submit", async (e) =
         if (result.code === 1000) {
             alert("Cập nhật thành công!");
             closeUpdateModal();
-            loadBooks();
+            loadBooks(currentPage); // ⚡ giữ nguyên trang
         } else {
             alert("Cập nhật thất bại!");
         }
@@ -171,13 +192,17 @@ document.getElementById("updateBookForm").addEventListener("submit", async (e) =
         console.error("Error updating book:", error);
     }
 });
-// ----------------- Thêm sách -----------------
+
+// ==================== ⚡ THÊM SÁCH ====================
 function openAddModal() {
-    document.getElementById("addModal").style.display = "block";
+    const modal = document.getElementById("addModal");
+    modal.classList.add("show"); // 🆕 animation mượt
 }
 
 function closeAddModal() {
-    document.getElementById("addModal").style.display = "none";
+    const modal = document.getElementById("addModal");
+    modal.classList.remove("show");
+    setTimeout(() => modal.style.display = "none", 200);
 }
 
 document.getElementById("addBookForm").addEventListener("submit", async (e) => {
@@ -188,14 +213,9 @@ document.getElementById("addBookForm").addEventListener("submit", async (e) => {
     formData.append("file", fileInput.files[0]);
 
     try {
-        // Upload ảnh trước
-        const uploadRes = await fetch(UPLOAD_API, {
-            method: "POST",
-            body: formData
-        });
-        const imageUrl = await uploadRes.text(); // server trả về url ảnh
+        const uploadRes = await fetch(UPLOAD_API, { method: "POST", body: formData });
+        const imageUrl = await uploadRes.text();
 
-        // Lấy dữ liệu form
         const bookData = {
             bookName: document.getElementById("bookName").value,
             authorship: document.getElementById("authorship").value,
@@ -206,7 +226,6 @@ document.getElementById("addBookForm").addEventListener("submit", async (e) => {
             imageUrl: imageUrl
         };
 
-        // Gửi API thêm sách
         const res = await fetch(`${API_BASE}/add`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -226,69 +245,43 @@ document.getElementById("addBookForm").addEventListener("submit", async (e) => {
     }
 });
 
-// Load khi mở trang
-loadBooks();
-
-// Hàm tìm kiếm
+// ==================== ⚡ TÌM KIẾM ====================
 async function searchBooks(page = 1) {
     const keyword = document.getElementById("searchKeyword").value.trim();
     if (!keyword) {
-        loadBooks(page); // nếu trống thì load toàn bộ
+        loadBooks(page);
         return;
     }
+
+    showLoading(); // 🆕 hiển thị loader
 
     try {
         const response = await fetch(`${API_BASE}/search?page=${page}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}`);
         const result = await response.json();
 
         if (result.code === 1000) {
-            const tbody = document.querySelector("#bookTable tbody");
-            tbody.innerHTML = "";
-
-            result.data.books.forEach(book => {
-                const row = `
-                    <tr>
-                        <td><img src="${book.imageUrl}" alt="Book Image"></td>
-                        <td>${book.bookName}</td>
-                        <td>${book.authorship}</td>
-                        <td>${book.bookGerne}</td>
-                        <td>${book.bookPublisher}</td>
-                        <td>${book.quantity}</td>
-                        <td>${book.price} $</td>
-                        <td>
-                            <button class="btn-update" onclick="updateBook('${book.id}')">Cập Nhật</button>
-                            <button class="btn-delete" onclick="deleteBook('${book.id}')">Xóa</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-
-            // cập nhật phân trang
+            renderBooks(result.data);
             currentPage = result.data.currentPage;
             totalPages = result.data.totalPages;
-
-            // gắn phân trang để gọi lại search thay vì loadAll
             renderPaginationSearch(keyword);
+            scrollToTop(); // 🆕 mượt khi chuyển trang
         }
     } catch (error) {
         console.error("Error searching books:", error);
     }
 }
 
-// Render phân trang cho tìm kiếm
+// ==================== ⚡ PHÂN TRANG TÌM KIẾM ====================
 function renderPaginationSearch(keyword) {
     const paginationDiv = document.getElementById("pagination");
     paginationDiv.innerHTML = "";
 
-    // Previous
     const prevBtn = document.createElement("button");
     prevBtn.innerText = "«";
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => searchBooks(currentPage - 1);
     paginationDiv.appendChild(prevBtn);
 
-    // Số trang
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.innerText = i;
@@ -297,10 +290,24 @@ function renderPaginationSearch(keyword) {
         paginationDiv.appendChild(btn);
     }
 
-    // Next
     const nextBtn = document.createElement("button");
     nextBtn.innerText = "»";
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => searchBooks(currentPage + 1);
     paginationDiv.appendChild(nextBtn);
 }
+
+// ==================== ⚡ TỐI ƯU UX ====================
+function scrollToTop() { // 🆕
+    document.querySelector("#bookTable").scrollIntoView({ behavior: "smooth" });
+}
+
+// 🆕 debounce tìm kiếm để không gọi API liên tục
+let searchTimeout = null;
+document.getElementById("searchKeyword").addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => searchBooks(), 400);
+});
+
+// ==================== ⚡ KHỞI ĐỘNG ====================
+loadBooks();

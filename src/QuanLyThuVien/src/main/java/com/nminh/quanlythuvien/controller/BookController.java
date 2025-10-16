@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
     @Autowired
     private BookService bookService;
-
+    //Add book api
     @PostMapping("/add")
     public ApiResponse addBook(@RequestBody BookDTORequest bookDTORequest) {
         log.info("bookDTORequest: {}", bookDTORequest);
