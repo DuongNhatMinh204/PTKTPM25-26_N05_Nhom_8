@@ -1,16 +1,12 @@
 const API_URL = "http://localhost:8080/api/shipper/get-book-order";
 const BASE_API = "http://localhost:8080/api/shipper";
-
-// ✅ Lấy userId từ localStorage (giả sử đã lưu khi đăng nhập)
 const userId = localStorage.getItem("userId");
 
-// Nếu chưa có shipperId thì yêu cầu đăng nhập lại
 if (!userId) {
     alert("⚠️ Không tìm thấy thông tin shipper. Vui lòng đăng nhập lại!");
-    window.location.href = "/login.html";
+    window.location.href = "/login";
 }
 
-// Gọi API để lấy danh sách đơn hàng được giao
 async function loadShipperOrders() {
     try {
         const response = await fetch(`${API_URL}?userId=${userId}`);

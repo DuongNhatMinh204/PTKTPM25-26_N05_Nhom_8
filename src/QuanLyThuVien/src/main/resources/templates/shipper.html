@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>📦 Trang Quản Lý Giao Hàng</title>
-    <link rel="stylesheet" href="/css/shipper.css">
+    <link rel="stylesheet" href="/css/shipper.css" />
 </head>
 <body>
-<h1>🚚 Trang Giao Hàng - Shipper</h1>
+<header>
+    <h1>🚚 Trang Giao Hàng - Shipper</h1>
+    <button id="logout-btn" title="Đăng xuất">🔓 Đăng xuất</button>
+</header>
 
-<div id="shipper-info"></div>
+<section id="shipper-info" class="card"></section>
 
 <h2>📦 Danh Sách Đơn Hàng Cần Giao</h2>
 <div id="orders-container"></div>
 
 <script src="/js/shipper.js"></script>
+<script>
+    document.getElementById("logout-btn").addEventListener("click", () => {
+        if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+            localStorage.removeItem("userId");
+            window.location.href = "/login";
+        }
+    });
+</script>
 </body>
 </html>
