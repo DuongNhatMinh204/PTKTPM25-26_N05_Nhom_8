@@ -72,6 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String changeStatus(String userId) {
         User user = userRepository.findById(userId).orElse(null);
+        assert user != null;
         if(user.getStatus().equals(Constants.ACTIVE_STATUS)){
             user.setStatus(Constants.INACTIVE_STATUS);
         }else {
