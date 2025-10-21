@@ -1,73 +1,204 @@
-/* Tổng quan body */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f4f7f9;
-    margin: 0;
-    padding: 20px;
-    color: #333;
+/* ====== GIAO DIỆN TỔNG ====== */
+:root {
+    --bg: #f5f7fb;
+    --primary-1: #4CAF50;
+    --primary-2: #81C784;
+    --muted: #777;
+    --card-bg: #ffffff;
+    --shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Header */
-header {
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 20px;
+    color: #222;
+}
+
+/* ====== THANH HEADER ====== */
+header.topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-}
-
-header h1 {
-    font-size: 1.8rem;
-    color: #007bff;
-    margin: 0;
-}
-
-#logout-btn {
-    background-color: #dc3545;
-    border: none;
-    padding: 10px 18px;
+    background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
     color: white;
+    padding: 14px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header.topbar h1 {
+    margin: 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.user-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+.user-icon {
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-name {
     font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 14px;
 }
 
-#logout-btn:hover {
-    background-color: #b02a37;
-}
-
-/* Thẻ card để hiển thị info */
-.card {
-    background-color: #fff;
-    padding: 18px 22px;
+/* ====== NÚT ĐĂNG XUẤT ====== */
+.btn-logout, #logout-btn {
+    background: linear-gradient(90deg, #ff5252, #e53935);
+    color: white;
+    border: none;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 25px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Tiêu đề h2 */
+.btn-logout:hover, #logout-btn:hover {
+    background: linear-gradient(90deg, #ff1744, #c62828);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+}
+
+.btn-logout:active, #logout-btn:active {
+    transform: scale(0.97);
+}
+
+/* ====== LAYOUT CHÍNH ====== */
+.container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 16px 60px;
+}
+
+/* ====== PROFILE ====== */
+.profile-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 18px;
+    margin: 16px 0;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    gap: 12px;
+}
+
+.profile-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.profile-avatar {
+    width: 76px;
+    height: 76px;
+    font-size: 36px;
+    background: #e8f5e9;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.profile-meta h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.profile-meta .muted {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.profile-right {
+    text-align: right;
+    min-width: 160px;
+}
+
+.profile-stats div {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.profile-stats strong {
+    font-weight: 600;
+}
+
+/* ====== DANH SÁCH ĐƠN ====== */
 h2 {
-    color: #444;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 18px;
     border-left: 6px solid #007bff;
     padding-left: 10px;
-    margin-bottom: 20px;
 }
 
-/* Đơn hàng */
+#orders-container {
+    padding: 8px 0 60px;
+}
+
 .order {
-    background: #fff;
+    background: var(--card-bg);
+    padding: 14px;
+    margin-bottom: 14px;
     border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow);
     transition: box-shadow 0.2s ease;
 }
 
 .order:hover {
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 .order-header {
+    margin-bottom: 8px;
+    font-size: 14px;
     border-bottom: 1px solid #eee;
     padding-bottom: 8px;
     margin-bottom: 12px;
@@ -89,9 +220,21 @@ h2 {
     color: #555;
 }
 
-/* Các nút hành động */
+/* ====== ACTIONS / BUTTONS ====== */
 .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin-top: 12px;
+}
+
+.actions button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 button {
@@ -105,54 +248,82 @@ button {
     transition: background-color 0.3s ease;
 }
 
+/* Specific buttons */
 .start-btn {
-    background-color: #007bff;
+    background: #4CAF50;
     color: white;
 }
 
 .start-btn:hover {
-    background-color: #0056b3;
+    background-color: #388e3c;
 }
 
 .success-btn {
-    background-color: #28a745;
+    background: #2196F3;
     color: white;
 }
 
 .success-btn:hover {
-    background-color: #1e7e34;
+    background-color: #1976d2;
 }
 
 .fail-btn {
-    background-color: #dc3545;
+    background: #f44336;
     color: white;
 }
 
 .fail-btn:hover {
-    background-color: #a71d2a;
+    background-color: #c62828;
 }
 
-/* Text nhỏ, ghi chú */
+/* Small text */
 em {
     color: #888;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-    body {
-        padding: 12px;
-    }
-    header {
+/* ====== RESPONSIVE ====== */
+@media (max-width: 720px) {
+    .profile-card {
         flex-direction: column;
         align-items: flex-start;
+        gap: 12px;
     }
-    #logout-btn {
-        margin-top: 10px;
+
+    .profile-right {
+        text-align: left;
         width: 100%;
     }
+
+    .profile-avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 30px;
+        border-radius: 10px;
+    }
+
+    .topbar-right {
+        gap: 8px;
+    }
+
     .order-header strong {
         min-width: auto;
         display: block;
         margin-bottom: 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    header.topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #logout-btn {
+        margin-top: 10px;
+        width: 100%;
     }
 }
